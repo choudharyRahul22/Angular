@@ -303,10 +303,146 @@ Replace
 styleUrls: ['./app.component.css'] with
 styles: ['h3{color: red;}']
 
+Note: To use selector as attribute we need to give it inside '[]'.
+If we change selector: 
+from : 'app-servers',
+to   : '[app-servers]',
 
+In html if we do like
+<app-servers></app-servers>
+we will get below error:
+'app-servers' is not a known element
 
+Solution:
+we need to give the selector as attribute like :
+ <div app-servers></div>
 
+Using selector as a class:
+<div class="app-servers" ></div>
+selector: '.app-servers',
 
+Databinding:
+------------
+Typescript code -----communication/databinding-----html
 
+a.StringInterpolation:
+----------------------
+Any expression inside {{}} should return a string.
+Even we can use {{'Rahul Choudhary'}} this is valid as return a string.
+We can call a method inside this which should return a string.
+We can use ternary expression inside {{}} but we can use block condition like if else.
 
- 
+Note:
+serverId: number = 1;
+{{'Server'}} with ID {{serverId}}
+Above we say {{}} should return string but here we return a number, so we are updating above defination as 'Any expression inside {{}} should return a string or coercion/change to string like number and string coercion to string'.
+
+Example:
+  serverId: number = 1;
+  serverStatus: string = 'online';
+  serverIP: string = '127.0.0.1';
+
+  getServerIP(){
+    return this.serverIP;
+  }
+
+  <p>
+  {{'Server'}} with ID {{serverId}} status {{serverStatus}}  IP {{getServerIP()}}
+  </p>
+
+b.Property Binding:
+-------------------
+Bind property like : html button element property disabled
+
+<button class=".btn btn-success" [disabled]="!allowNewServer">Add Server</button>
+
+allowNewServer = false;
+
+  constructor() {
+    setTimeout(()=>{
+      this.allowNewServer = true;
+    },2000);
+  }
+
+We can bind directive property also.
+
+Property Binding Vs String Interpolation:
+-----------------------------------------
+Use property binding when you need to change html and directive property.
+Dont mix/use both at same time.
+
+c.Event Binding:
+----------------
+For event we use '()'
+
+html:
+<button class=".btn btn-success" [disabled]="!allowNewServer" (click)="onCreateServer()">Add Server</button>
+<p [innerText]="!allowNewServer"></p>
+<p>{{serverCreationStatus}}</p>
+
+typescript:
+serverCreationStatus = "No Server created";
+onCreateServer(){
+    this.serverCreationStatus = "Server was created";
+  }
+
+html:
+<label>Server Name : Event data-binding</label>
+<input type="text" class="form-control" (input)="onUpdateServerName($event)">
+<p>{{serverName}}
+
+typescript:
+serverName = "";
+onUpdateServerName(event:Event){
+    this.serverName = (<HTMLInputElement>event.target).value;
+  }
+
+Note:
+How do you know to which Properties or Events of HTML Elements you may bind? You can basically bind to all Properties and Events - a good idea is to console.log()  the element you're interested in to see which properties and events it offers.
+
+Important: For events, you don't bind to onclick but only to click (=> (click)).
+
+The MDN (Mozilla Developer Network) offers nice lists of all properties and events of the element you're interested in. Googling for YOUR_ELEMENT properties  or YOUR_ELEMENT events  should yield nice results.
+
+Two Way Data Binding:
+---------------------
+[(ngModel)] use this built-in directive for 2 way data binding.
+
+html:
+<label>Server Name : Two way data-binding</label>
+<input type="text" class="form-control" [(ngModel)]="serverName">
+<p>{{serverName}}</p>
+
+typescript:
+serverName = "";
+
+Note:
+Important: For Two-Way-Binding to work, you need to enable the ngModel  directive. This is done by adding the FormsModule  to the imports[]  array in the AppModule.
+
+You then also need to add the import from @angular/forms  in the app.module.ts file:
+
+import { FormsModule } from '@angular/forms'; 
+
+First Assignment:
+-----------------
+Create a input box and button check if input size is > 5 than enable button otherwise disable.
+
+html:
+<label>Server Name : Two way data-binding</label>
+<input type="text" class="form-control" [(ngModel)]="serverName">
+<p>{{serverName}}</p>
+
+<hr>
+<button class=".btn btn-success" [disabled]="allowNewServer()" (click)="onCreateServer()">Add Server</button>
+
+typescript:
+serverName = "";
+allowNewServer(){
+    if(this.serverName.length >= 4){
+      return false;
+    }
+    return true;
+  }
+
+Directives:
+-----------
