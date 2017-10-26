@@ -446,3 +446,12 @@ allowNewServer(){
 
 Directives:
 -----------
+Directives are instruction in the DOM.
+
+Component are like directive which has selector and buisness logic, we place selector in html and says this is our component which binds with buisness logic.
+
+Component are directive with a Template.
+
+There are directives without template like:
+ngClass ngBind .....
+and even we have custom directives.
