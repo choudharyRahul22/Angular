@@ -10,6 +10,10 @@ export class ServersComponent implements OnInit {
 
   serverCreationStatus = "No Server created";
   serverName = "";
+  servers = ['Testserver-1', 'Testserver-2', 'Testserver-3'];
+  showServerName = false;
+  log = [];
+  date = [];
 
   constructor() {
   }
@@ -19,6 +23,16 @@ export class ServersComponent implements OnInit {
 
   onCreateServer(){
     this.serverCreationStatus = "Server was created with Name : " + this.serverName;
+    this.servers.push(this.serverName);
+    this.showServerName = !this.showServerName;
+    this.log.push(this.log.length + 1);
+  }
+
+  onCreateDate() {
+    this.serverCreationStatus = "Server was created with Name : " + this.serverName;
+    this.servers.push(this.serverName);
+    this.showServerName = !this.showServerName;
+    this.date.push(new Date());
   }
 
   onUpdateServerName(event:Event){
@@ -31,5 +45,8 @@ export class ServersComponent implements OnInit {
     }
     return true;
   }
+
+
+
 
 }

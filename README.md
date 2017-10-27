@@ -453,5 +453,98 @@ Component are like directive which has selector and buisness logic, we place sel
 Component are directive with a Template.
 
 There are directives without template like:
-ngClass ngBind .....
+ngClass ngBind ngIf.....
 and even we have custom directives.
+
+ngIf:
+------
+structural directive *ngIf
+* indicates that this will either contain or remove from DOM.
+Also known as structural directive.
+
+<label>Server Name : Two way data-binding</label>
+<input type="text" class="form-control" [(ngModel)]="serverName">
+<hr>
+<button class=".btn btn-success" [disabled]="!allowNewServer" (click)="onCreateServer()">Add Server</button>
+<p *ngIf="buttonClicked">Server was created with Name : {{serverName}}</p>
+
+typescript:
+buttonClicked = false;
+onCreateServer(){
+    this.buttonClicked = true;
+  }
+
+another way
+<button class=".btn btn-primary" [disabled]="!allowNewServer" (click)="onCreateServer()">Add Server</button><br><br>
+<p *ngIf="buttonClicked ; else noServer">Server was created with Name : {{serverName}}</p>
+<ng-template #noServer><p>No Server created!</p></ng-template>
+
+ngStyle:
+--------
+<p [ngStyle]="{backgroundColor : getColor()}">
+  {{'Server'}} with ID {{serverId}} status {{serverStatus}}  IP {{getServerIP()}}
+</p>
+
+typescript:
+serverStatus: string = 'online';
+getColor() {
+    return this.serverStatus === 'online' ? 'green' : 'red';
+  }
+
+ngClass:
+--------
+.online{
+  color: white;
+}
+
+<p [ngStyle]="{backgroundColor : getColor()}"
+   [ngClass]="{online: serverStatus == 'online'}">
+  {{'Server'}} with ID {{serverId}} status {{serverStatus}}  IP {{getServerIP()}}
+</p>
+
+ngFor:
+-------
+structural directive *ngFor.
+
+Now on click we get Date:
+<br>
+<button class=".btn btn-success" (click)="onCreateDate()">Add Server</button>
+<hr>
+Toggle:
+<p *ngIf="showServerName">{{serverName}}</p>
+<hr>
+Loop:
+<div *ngFor="let dateItem of date; let i = index" [ngStyle]="{backgroundColor: i >= 5 ? 'green' : 'transparent'}"
+     [ngClass]="{'white-text': i >= 5}">{{dateItem}}</div>
+<hr>
+
+typescript:
+serverCreationStatus = "No Server created";
+serverName = "";
+servers = ['Testserver-1', 'Testserver-2', 'Testserver-3'];
+showServerName = false;
+date = [];
+
+onCreateDate() {
+    this.serverCreationStatus = "Server was created with Name : " + this.serverName;
+    this.servers.push(this.serverName);
+    this.showServerName = !this.showServerName;
+    this.date.push(new Date());
+  }
+
+Cource Project:
+---------------
+Going to build recipe app which has 
+Planning:
+1. We need Root Component which holds all Components.
+2. We need Header Component.
+3. We need ShoppingList Component.
+   a. ShoppingList Component.
+   b. ShoppingListEdit Component.
+4. We need RecipeList Component
+   a. RecipeList Component.
+   b. Recipe Component.
+   c. RecipeDetail Component.
+
+
+
