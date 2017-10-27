@@ -546,5 +546,9 @@ Planning:
    b. Recipe Component.
    c. RecipeDetail Component.
 
+Model that we going to use:
+1. Ingredient (name and amount) for ShoppingList
+2. Recipe (name, amount, image, description ...) for Recipe
+
 
 
