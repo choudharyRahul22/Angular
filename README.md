@@ -550,5 +550,469 @@ Model that we going to use:
 1. Ingredient (name and amount) for ShoppingList
 2. Recipe (name, amount, image, description ...) for Recipe
 
+We created :
+app
+	header
+	recipes
+			recipe-deatil
+			recipe-list
+			recipe-item
+	shopping-list
+			shopping-edit
+
+Header:
+-------
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="#" class="navbar-brand">Recipe Cart</a>
+    </div>
+
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="#">Recipes</a></li>
+        <li><a href="#">Shopping List</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" role="button">Manage <span class="caret"></span> </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Save Data</a></li>
+            <li><a href="#">Fetch Data</a></li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+Recipe Model:
+-------------
+export class Recipe {
+
+  // Global Variables For Recipe
+  public name: string;
+  public description: string;
+  public imagePath: string;
+
+  // Constructor
+  constructor(name: string, description: string, imagePath: string) {
+    this.name = name;
+    this.description = description;
+    this.imagePath = imagePath;
+  }
+
+}
+
+Recipe List:
+------------
+RecipeListComponent
+ recipes: Recipe[] = [
+    new Recipe('Test Recipe' , 'Test Description', 'https://www.ndtv.com/cooks/images/iStock_50367092_SMALL%20%281%29.jpg'),
+    new Recipe('Test Recipe' , 'Test Description', 'https://www.ndtv.com/cooks/images/iStock_50367092_SMALL%20%281%29.jpg')
+  ];
+
+RecipeListHtml:
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-success">New Recipe</button>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12" >
+    <a href="#" class="list-group-item clearfix" *ngFor="let recipe of recipes">
+      <div class="pull-left">
+        <h4 class="list-group-item-heading">{{recipe.name}}</h4>
+        <p class="list-group-item-text">{{recipe.description}}</p>
+      </div>
+      <span class="pull-right">
+        <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="img-responsive" style="max-height: 50px;">
+      </span>
+    </a>
+    <app-recipe-item></app-recipe-item>
+  </div>
+</div>
+
+Recipe Detail HTML:
+-------------------
+<div class="row">
+  <div class="col-xs-12">
+    <img src="" alt="" class="img-responsive">
+  </div>
+</div>
 
 
+<div class="row">
+  <div class="col-xs-12">
+    <h1>Recipe Name</h1>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="btn-group">
+       <button type="button"
+               class="btn btn-primary dropdown-toggle">Manage Recipe <span class="caret"></span> </button>
+      <ul class="dropdown-menu">
+        <li><a href="#">To hopping List</a></li>
+        <li><a href="#">Edit Recipe</a></li>
+        <li><a href="#">Delete Recipe</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xs-12">
+    Description
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xs-12">
+    Ingredints
+  </div>
+</div>
+
+Shopping List HTML:
+-------------------
+<div class="row">
+  <div class="col-md-10">
+    <app-shopping-edit></app-shopping-edit>
+    <hr>
+    <ul class="list-group">
+      <a class="list-group-item" style="cursor: pointer"></a>
+    </ul>
+  </div>
+</div>
+
+
+
+Ingredient Model:
+-----------------
+export class Ingredient {
+
+  /*
+      Behind the scen this will create the global variables name and amount
+      Also whenever this class get instanciated this will assign the param to global variables.
+
+      Typescript is just reducing the amount of code we going to write.
+   */
+
+  constructor(public name: string , public amount: number) {}
+}
+
+Shopping Edit HTML:
+-------------------
+<div class="row">
+  <div class="col-xs-12">
+    <form>
+      <div class="row">
+
+        <div class="col-sm-5 form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" class="form-control">
+        </div>
+
+        <div class="col-sm-2 form-group">
+          <label for="amount">Amount</label>
+          <input type="number" id="amount" class="form-control">
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success" type="submit">Add</button>
+          <button class="btn btn-danger" type="button">Delete</button>
+          <button class="btn btn-primary" type="button">Clear</button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+Debugging:
+----------
+For debugging click on sources
+main.bundle.js find you code click on that line and you will jump into your typrscript code put breakpoint there and it works.
+
+CLI bundle sourcemap which will map above js to typescript.
+
+Even you can see your typescript under.
+webpack  .  src  app  app.component.ts 
+
+To undersatnd application structure install augury extension in chrome.
+
+Components and Databinding:
+----------------------------
+Here we use samll project where we have:
+cockpit component in which user will add new server (servername and servercontent).
+app component to which we will pass above information (servername and servercontent).
+server-element component which will recive info (servername and servercontent) from app component.
+
+Whenever we click on input box then a event is genrated which some information like element and and keypressed we capture that event and use the data.
+
+Here also we do something like this for component to component communication.
+we will emmit some event from one component and listen on other component.
+
+HTML : Has property (disable, src) and event (click mousehover press).
+Directive : Has custom properties and events.
+Components : Has custom properties and events.
+
+Parent to Child Databinding:
+----------------------------
+AppComponent: in constructor we created some dumy object for this array.
+serverElements = [
+    {type: 'server', name: 'ServerName' , content: 'ServerContent'}
+  ];
+<app-server-element *ngFor="let serverElement of serverElements" [element]="serverElement"></app-server-element>
+
+ServerElementComponent:
+ @Input() element: {type: string, name: string, content: string};
+
+ <div class="panel panel-default">
+  <div class="panel-heading">{{ element.name }}</div>
+  <div class="panel-body">
+    <p>
+      <strong *ngIf="element.type === 'server'" style="color: red">{{ element.content }}</strong>
+      <em *ngIf="element.type === 'blueprint'">{{ element.content }}</em>
+    </p>
+  </div>
+</div>
+
+AppComponent has a array of object of type:
+serverElements = [
+    {type: 'server', name: 'ServerName' , content: 'ServerContent'}
+  ];
+
+then we access this array using ng for
+now we need to pass the single serverelement object to ServerComponent.
+<app-server-element *ngFor="let serverElement of serverElements" [element]="serverElement"></app-server-element>
+
+Now we need to create a element property inside ServerComponent of type:
+element: {type: string, name: string, content: string};
+
+But the proerty element of ServerComonent cant be access from AppComponent
+so wee need to allow this property by using @Input() 
+
+Note: Assign an alias
+<app-server-element *ngFor="let serverElement of serverElements" [srvElement]="serverElement"></app-server-element>
+
+@Input('srvElement') element: {type: string, name: string, content: string};
+
+Note:
+Pass data from parent to child with input binding
+Intercept input property changes with a setter
+Intercept input property changes with ngOnChanges()
+
+Parent listens for child event
+Parent interacts with child via local variable
+Parent calls an @ViewChild()
+Parent and children communicate via a service
+
+Child to Parent Databinding:
+----------------------------
+<button
+      class="btn btn-primary"
+      (click)="onAddServer()">Add Server</button>
+Button clicked onAddServer() function runs
+
+onAddServer() {
+    this.serverAddEvent.emit({
+      name: this.newServerName,
+      content: this.newServerContent
+    });
+  }
+event emitted to custom event we created serverAddEvent
+
+@Output() serverAddEvent = new EventEmitter<{name: string, content: string}>();
+Output the event so that other component can listen to this event.
+
+AppComponent:
+<app-cockpit (serverAddEvent)="onServerAdded($event)"></app-cockpit>
+AppComponent listen to that event and call onServerAdded.
+
+onServerAdded(serverData: {name: string, content: string}) {
+    this.serverElements.push({
+      type: 'server',
+      name: serverData.name,
+      content: serverData.content
+    });
+  }
+this will add new data to array
+
+serverElements = [
+    {type: 'server', name: 'ServerName' , content: 'ServerContent'}
+  ];
+array gets updated.
+
+<app-server-element *ngFor="let serverElement of serverElements" [element]="serverElement"></app-server-element>
+this will show updated/added data
+
+Note:
+Angular uses ViewEncapsulation to emulate the css.
+Css for Component will apply on that component only.
+In selector we can use encapsulation: ViewEncapsulation.None
+than css will be applied application wise.
+ViewEncapsulation.Emulated is by default.
+
+Local Reference:
+----------------
+local reference will give the reference of the element.
+using local ref we can access every property of element.
+
+ <input type="text" class="form-control" #serverNameLocalRef>
+ <button
+      class="btn btn-primary"
+      (click)="onAddServer(serverNameLocalRef)">Add Server</button>
+
+ onAddServer(serverNameLocalRef: HTMLInputElement) {
+    console.log(serverNameLocalRef.value);
+    this.serverAddEvent.emit({
+      name: serverNameLocalRef.value,
+      content: this.newServerContent
+    });
+  }
+
+View Child:
+-----------
+To access the local ref directly in typescript use View Child.
+No need to pass the local ref as a param on button click event.
+
+<input type="text" class="form-control" #serverNameLocalRef>
+<input type="text" class="form-control" #serverContentLocalRef>
+
+<button
+      class="btn btn-primary"
+      (click)="onAddServer(serverNameLocalRef)">Add Server</button>
+
+
+@ViewChild('serverContentLocalRef') serverContentLocalRef;
+onAddServer(serverNameLocalRef: HTMLInputElement) {
+
+    this.serverAddEvent.emit({
+      name: serverNameLocalRef.value,
+      content: this.serverContentLocalRef.nativeElement.value
+    });
+  }
+
+Add Content:
+------------
+<div class="panel-body">
+        <ng-content></ng-content>
+</div>
+
+<app-server-element *ngFor="let serverElement of serverElements" [element]="serverElement">
+         <p>
+           <strong *ngIf="serverElement.type === 'server'" style="color: red">{{ serverElement.content }}</strong>
+           <em *ngIf="serverElement.type === 'blueprint'">{{ serverElement.content }}</em>
+         </p>
+</app-server-element>
+
+Component Lifecycle:
+--------------------
+ngOnChanges:will call when new component created and when ever component property marked with @Input() get change.
+
+ngOnInIt:will call when component get intiallized after the constructor.
+
+ngDoCheck:will run whenever any property value get changes it will run and change the crosponding template/html value.
+
+ngAfterConetentInIt:will call after content(ng-content) has been projected into view.
+
+ngAfterContentChecked:will run everty time the projected content has been checked.
+
+ngAfterViewInit:will run once component view finished initializing.
+
+ngAfterViewChecked:will run every time the view has been checked.
+
+ngOnDestroy:will run once the component will destroy from DOM.
+
+Example:
+
+  @Input() element: {type: string, name: string, content: string};
+
+  constructor() {
+    console.log('Constructor Called');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('ngOnChanges Called');
+    console.log(changes);
+  }
+
+  ngOnInit() {
+    console.log('ngOnInit Called');
+  }
+
+  ngDoCheck() {
+    console.log('ngDoCheck Called');
+  }
+
+  ngAfterContentInit() {
+    console.log('ngAfterContentInit Called');
+  }
+
+  ngAfterContentChecked() {
+    console.log('ngAfterContentChecked Called');
+  }
+
+  ngAfterViewInit() {console.log('ngAfterViewInit Called');}
+
+  ngAfterViewChecked() {console.log('ngAfterViewChecked Called');}
+
+  ngOnDestroy() {console.log('ngOnDestroy Called');}
+
+
+@ContentChild:
+---------------
+if we have any content which we use in our template as ng-content than we can access it using @ContentChild.
+
+Directives:
+-----------
+Instruction to DOM dont have a template.
+ng g d directive-name.
+
+directive:
+@Directive({
+  selector: '[appBasicHighlight]'
+})
+export class BasicHighlightDirective implements OnInit{
+
+  private elementRef: ElementRef;
+
+  constructor(elementRef: ElementRef) {}
+
+  ngOnInit() {
+    this.elementRef.nativeElement.style.backgroundColor = 'green';
+  }
+}
+
+HTML:
+<p appBasicHighlight>Style this will background color Green</p>
+
+directive:
+@Directive({
+  selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit{
+
+  constructor(private elRef: ElementRef, private renderer: Renderer2) { }
+
+  ngOnInit() {
+    this.renderer.setStyle(this.elRef.nativeElement, 'backgroundColor' , 'blue');
+  }
+}
+
+HTML:
+<p appBetterHighlight="">Style this will background color Blue</p>
+
+Note: Renderer2 just wrap some methods will help to modify DOM.
+Renderer take 3 param (element ref, style , style value)
