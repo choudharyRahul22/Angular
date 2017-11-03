@@ -13,7 +13,7 @@
           </li>
         </div>
 
-        <div *ngIf="!onlyOdd">
+        <div *appStructuralDirective="onlyOdd">
           <li
             class="list-group-item" *ngFor="let even of evenNumbers" [ngClass]="{odd: even % 2 !== 0}">{{even}}
           </li>
@@ -23,7 +23,14 @@
 
     </div>
   </div>
-  <p appBasicHighlight>Style this will background color Green</p>
-  <p appBetterHighlight="">Style this will background color Blue</p>
+  <h3 appBasicHighlight>Style this will background color Green</h3>
+  <h3 appBetterHighlight>Style this will background color Blue</h3>
+
+  <div [ngSwitch]="value">
+    <p *ngSwitchCase="5">Value is 5</p>
+    <p *ngSwitchCase="10">Value is 10</p>
+    <p *ngSwitchCase="15">Value is 15</p>
+    <p *ngSwitchDefault>Value is Default</p>
+  </div>
 
 </div>

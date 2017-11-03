@@ -142,6 +142,8 @@ main.ts ----->app.module.ts---->app.component.ts(which has all info).
 
 Components:
 -----------
+Note: Project we import for component directive .....need to stop and start again to see the changes.
+
 Components are directives with a template and buisness logic which can be used anywhere and any number of times.
 
 Note: in angular-1 we have directives 
@@ -977,6 +979,8 @@ if we have any content which we use in our template as ng-content than we can ac
 
 Directives:
 -----------
+Note: Project we import for component directive .....need to stop and start again to see the changes.
+
 Instruction to DOM dont have a template.
 ng g d directive-name.
 
@@ -1014,5 +1018,171 @@ export class BetterHighlightDirective implements OnInit{
 HTML:
 <p appBetterHighlight="">Style this will background color Blue</p>
 
-Note: Renderer2 just wrap some methods will help to modify DOM.
+Note: Renderer2 just wrap some methods will help to manulupate DOM.
 Renderer take 3 param (element ref, style , style value)
+
+Listen TO Event On Directive:
+-----------------------------
+Using @HostListener : which takes event name as param
+
+@HostListener('mouseenter') mouseEnter(event: Event) {
+    this.renderer.setStyle(this.elRef.nativeElement, 'backgroundColor' , 'blue');
+  }
+
+@HostListener('mouseleave') mouseLeave(event: Event) {
+    this.renderer.setStyle(this.elRef.nativeElement, 'backgroundColor' , 'transparent');
+  }
+
+Using HostBinding:
+------------------
+@HostBinding : we can bind any property of element on which directive sit
+
+ @HostBinding('style.backgroundColor') backgroundColor: string;
+
+  constructor(private elRef: ElementRef, private renderer: Renderer2) { }
+
+  ngOnInit() {
+
+  }
+
+  @HostListener('mouseenter') mouseEnter(event: Event) {
+    //this.renderer.setStyle(this.elRef.nativeElement, 'backgroundColor' , 'blue');
+    this.backgroundColor = 'blue';
+  }
+
+  @HostListener('mouseleave') mouseLeave(event: Event) {
+    //this.renderer.setStyle(this.elRef.nativeElement, 'backgroundColor' , 'transparent');
+    this.backgroundColor = 'transparent';
+  }
+
+Structural Directive:
+---------------------
+We have * in front of directive which behind the scen is 
+*ngIf equals to [ngIf]=""
+so instead of writing above angular transform *ngIf to [ngIf]=""
+
+Note: ElementRef give ref of element on which directive sits and TemplateRef give ref of Template (ng-template) on which directive sits.
+ViewContainerRef where we mark/put our Template.
+
+Property of Directive or Component whene get changes then if we defined setter for that property its get called.
+
+Creating Structural Directive:
+------------------------------
+Earlier we use *ngIf to show or hide div.
+Now we create our own structural directive which will do the oposite.
+
+First create a new directive:
+// when we click on button the param to below will change.
+@Input() set appStructuralDirective(condition: boolean) {
+    if (!condition){
+      // on container this will show the template on which our directive sits.
+      this.viewContainerRef.createEmbeddedView(this.templateRef);
+    }else {
+      // if condition fails this will remove the element from container.
+      this.viewContainerRef.clear();
+    }
+  }
+
+  // we are getting ref of template where our directive sits.
+  // ViewContainer on which we show and hide the template.
+  constructor(private templateRef: TemplateRef<any> , private viewContainerRef: ViewContainerRef) { }
+
+HTML:
+// *appStructuralDirective will transform to [appStructuralDirective]=""
+// so property appStructuralDirective will map to directive class
+// on click this property gets change and call setter method
+// setter method is doing oposite of ngIf
+<div *appStructuralDirective="onlyOdd">
+          <li
+            class="list-group-item" *ngFor="let even of evenNumbers" [ngClass]="{odd: even % 2 !== 0}">{{even}}
+          </li>
+</div>
+
+ngSwitch:
+---------
+AppComponent
+ value = 10;
+
+HTML:
+ <div [ngSwitch]="value">
+    <p *ngSwitchCase="5">Value is 5</p>
+    <p *ngSwitchCase="10">Value is 10</p>
+    <p *ngSwitchCase="15">Value is 15</p>
+    <p *ngSwitchDefault>Value is Default</p>
+  </div>
+
+Course with Directive:
+----------------------
+Handling Dropdown
+We can use bootstrap javascript code for dropdown menu but here we use only angularjs to manupulate the DOM.
+
+Toggle Dropdown:
+----------------
+HTML:
+<div class="btn-group" appDropdown>
+       <button type="button"
+               class="btn btn-primary dropdown-toggle">Manage Recipe <span class="caret"></span> </button>
+      <ul class="dropdown-menu">
+        <li><a href="#">To hopping List</a></li>
+        <li><a href="#">Edit Recipe</a></li>
+        <li><a href="#">Delete Recipe</a></li>
+      </ul>
+    </div>
+  </div>
+
+DropdownDirective:
+ @HostBinding('class.open') isOpen = false;
+
+  constructor() { }
+
+  @HostListener('click') onToggle() {
+    this.isOpen = !this.isOpen;
+  }
+
+Services and Dependency Injection:
+----------------------------------
+Note: 
+We can provide services in app.module providers and our service than avialable to application wide.
+We can provide services in app.component providers and our service will be aviable to all child component of app component.
+We can provide services in single component who is not having any child but have parent component, in that case service wont be aviable to parent component.
+
+(Service will be aviable to component and its child not parent)
+
+Example:
+We have NewAccount Component in which user add new account.
+App Component will get that new account and pass it to Account Component.
+Account Component will show all acount.
+
+Earlier we were using custom events to pass and get data.
+using @Input and @Output
+
+Now we use services:
+we simply pass the new account info from NewAcoount Component to AccountService.
+Account Component will get the account info directly from Account Service instead from App Component.
+
+Note:
+Earlier we created the AccountService instance in App Component, New Acoount Component, Account Component which was wrong as App Component is parent of New Acoount Component & Account Component.
+So we remove the AccountService from Providers of both component.
+
+For Injecting a service into a service @Injectable is important.
+
+Emit Event From One Component TO Other Using Services:
+------------------------------------------------------
+On update in Account Component:
+onSetTo(status: string) {
+    this.accountService.updateAccount(this.id, status);
+    //this.loggingService.logStatus(status);
+    this.accountService.accountUpdated.emit(status);
+  }
+
+AccountService:
+accountUpdated = new EventEmitter<string>();
+
+NewAccount Component which recive the event:
+this.accountService.accountUpdated.subscribe(
+      (status) => alert('New Updated Status : ' + status)
+    );
+
+
+
+
