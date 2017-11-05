@@ -1183,6 +1183,95 @@ this.accountService.accountUpdated.subscribe(
       (status) => alert('New Updated Status : ' + status)
     );
 
+How Emit and Subscribe Work Here:
+---------------------------------
+ShoppingListComponent:
+// for the first time when this component loaded to show array of ingredients, after constructor ngOnOnit() will run, and we get array from shopping service.
+// ngOnInit will run once the new object of shopping component will be created that is when it see app-shoppinglist in html and it will start listening to event until this object gets destroyed.
+ngOnInit() {
+    this.ingredients = this.shoppingListService.getIngredients();
+    this.shoppingListService.ingredientChanged.subscribe(
+      (ingredients: Ingredient[]) => {
+        this.ingredients = ingredients;
+      }
+    );
+
+// on add of new ingredient we call shopping service add ingredient method.
+onAdd() {
+    const name = this.inputText.nativeElement.value;
+    const amount = this.amountText.nativeElement.value;
+    const ingredient = new Ingredient(name, amount )
+    this.shoppingListService.addIngredient(ingredient);
+  }
+
+ShoppingService:
+// we get the newly added ingredient and emit a event as we added new ingredient to copy of array and shopping component is still having array copy which is not updated.
+addIngredient(ingredient: Ingredient) {
+    this.ingredients.push(ingredient);
+    this.ingredientChanged.emit(this.ingredients.slice());
+
+  }
+
+// this will handle the event and emit
+ingredientChanged = new EventEmitter<Ingredient[]>();
+
+ShoppingListComponent:
+// this will listen to the event once it recive the event.
+// it is continoiusly listing to the events and once recive will update // the array of ingredient.
+ngOnInit() {
+    this.ingredients = this.shoppingListService.getIngredients();
+    this.shoppingListService.ingredientChanged.subscribe(
+      (ingredients: Ingredient[]) => {
+        this.ingredients = ingredients;
+      }
+    );
 
 
+Routing:
+--------
+In app module we need to add
+import {RouterModule, Routes} from "@angular/router";
+const appRoutes: Routes = [
+  {path: '' , component: HomeComponent},
+  {path: 'users' , component: UsersComponent},
+  {path: 'servers' , component: ServersComponent}
+]
+
+now need to register this constant in angular.
+imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    RouterModule.forRoot(appRoutes)
+  ],
+
+Use routes:
+-----------
+App Home Page : App Root
+<div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+   <router-outlet></router-outlet>
+</div>
+
+use as link:
+<div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a routerLink="/">Home</a></li>
+        <li role="presentation"><a routerLink="/servers">Servers</a></li>
+        <li role="presentation"><a [routerLink]="['/users']">Users</a></li>
+      </ul>
+</div>
+
+absoulte path : '/users'
+relative path : 'users'
+
+if you are on root ie: / than you go to servers path /servers
+not here we have a link to reload this page again.
+<a href="servers">reload same page</a>
+
+above we use relative path so it will be : /servers/servers which will throw an error. relative path just appned the new path to the current path
+
+if we change this to : <a href="/servers">reload same page</a>
+it will be : /servers only 
+
+so use absolute path or relative path according to usecase.
 
