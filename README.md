@@ -1275,3 +1275,15 @@ it will be : /servers only
 
 so use absolute path or relative path according to usecase.
 
+Note:
+RouterLink remember on which page you are and on which page you are going to.
+example: you are at /servers and you click link which reload itsself using link /servers than we get /servers/servers and we get error.
+
+Navigate on the other hand didnt remember whats your current page is, it always route you from root of application.
+example: if you are at /servers and click on reload than it dont know that you are on /servers and will look from root ie: / and go to 
+/servers.
+
+
+
+
+
