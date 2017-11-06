@@ -1304,6 +1304,67 @@ const appRoutes: Routes = [
     }
   }
 
+Angular wont load a new instance of component if we already on that:
+--------------------------------------------------------------------
+Due to performance issue if we are on a pirticular component and want to load same component again angular wont load a new instance this is default behaviour of angular.
+
+If we are on user component and fire below link:
+<a [routerLink]="['/users',10,'Rahul']">Rahul (10)</a>
+
+which will again fire same component on which we were earlier.
+
+We will see no change as a defualt behaviour.
+
+To overcome this we will set a subscriber to the param event.
+
+ngOnInit() {
+    this.user = {
+      id: this.route.snapshot.params['id'],
+      name: this.route.snapshot.params['name']
+    };
+
+    this.route.params.subscribe(
+      (params: Params) => {
+        this.user.id = params['id'];
+        this.user.name = params['name'];
+      }
+    );
+
+Note:
+When we subscribe to event its not attach to component that mean when you navigate away from that component, its get destroy but not the subscription because subscription sits in memory.
+
+so its good practice to subscribe the event using OnDestory.
+paramsSubscription: Subscription;
+
+this.paramsSubscription = this.route.params.subscribe(
+      (params: Params) => {
+        this.user.id = params['id'];
+        this.user.name = params['name'];
+      }
+    );
+
+Query Param:
+------------
+<a
+        [routerLink]="['/servers',1,'edit']"
+        [queryParams]="{allowEdit: '1'}"
+        fragment="Loading"
+        href="#"
+        class="list-group-item"
+        *ngFor="let server of servers">
+        {{ server.name }}
+      </a>
+
+using component:
+<button class="btn btn-primary" (click)="onLoadServer(2)">Load Server 1</button>
+
+onLoadServer(id: number) {
+    this.router.navigate(['/servers',id,'edit'], {queryParams: {allowEdit: '2'}, fragment: 'Loading'});
+  }
+
+ngOnDestroy() {
+    this.paramsSubscription.unsubscribe();
+  }
 
 
 
