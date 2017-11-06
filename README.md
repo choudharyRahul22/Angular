@@ -1283,6 +1283,27 @@ Navigate on the other hand didnt remember whats your current page is, it always 
 example: if you are at /servers and click on reload than it dont know that you are on /servers and will look from root ie: / and go to 
 /servers.
 
+To Get URL Param:
+-----------------
+const appRoutes: Routes = [
+  {path: '' , component: HomeComponent},
+  {path: 'users' , component: UsersComponent},
+  {path: 'users/:id/:name' , component: UserComponent},
+  {path: 'servers' , component: ServersComponent}
+]
+
+
+  user: {id: number, name: string};
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.user = {
+      id: this.route.snapshot.params['id'],
+      name: this.route.snapshot.params['name']
+    }
+  }
+
 
 
 
