@@ -1366,6 +1366,96 @@ ngOnDestroy() {
     this.paramsSubscription.unsubscribe();
   }
 
+Routing on List:
+----------------
+UsersComponent:
+<div class="list-group">
+      <a href="#" class="list-group-item" *ngFor="let user of users" [routerLink]="['/users',user.id,user.name]">
+        {{ user.name }}
+      </a>
+</div>
 
+AppModule:
+{path: 'users/:id/:name' , component: UserComponent},
 
+UserComponent:
+paramsSubscription: Subscription;
 
+  user: {id: number, name: string};
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.user = {
+      id: this.route.snapshot.params['id'],
+      name: this.route.snapshot.params['name']
+    };
+
+    this.paramsSubscription = this.route.params.subscribe(
+      (params: Params) => {
+        this.user.id = params['id'];
+        this.user.name = params['name'];
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.paramsSubscription.unsubscribe();
+  }
+
+UserCompoennt Html:
+<p>User with ID {{user.id}} loaded.</p>
+<p>User name is {{user.name}}</p>
+<hr>
+<a [routerLink]="['/users',10,'Rahul']">Rahul (10)</a>
+
+Nested Routing in App Module:
+-----------------------------
+Below First and second are same.We just define using children.
+
+First
+{path: 'servers' , component: ServersComponent},
+{path: ':id' , component: ServerComponent},
+{path: ':id/edit' , component: EditServerComponent}
+
+Second:
+{path: 'servers' , component: ServersComponent, children:[
+    {path: ':id' , component: ServerComponent},
+    {path: ':id/edit' , component: EditServerComponent}
+  ]},
+
+Child Route:
+------------
+App module:
+{path: 'servers' , component: ServersComponent, children:[
+    {path: ':id' , component: ServerComponent},
+    {path: ':id/edit' , component: EditServerComponent}
+  ]},
+
+Servers Component Html:
+<div class="col-xs-12 col-sm-4">
+    <router-outlet></router-outlet>
+    <!--<button class="btn btn-primary" (click)="onReload()">Reload Page</button>
+    <app-edit-server></app-edit-server>
+    <hr>
+    &lt;!&ndash;<app-server></app-server>&ndash;&gt;-->
+</div>
+
+Server Component Html:
+<h5>{{ server.name }}</h5>
+<p>Server status is {{ server.status }}</p>
+
+Passing Query Param:
+--------------------
+ this.router.navigate(['edit'],{relativeTo: this.route, queryParamsHandling: 'preserve'});
+
+ we can use merge in place of preserve.
+
+ Redirecting and Wildcard Route:
+ -------------------------------
+ {path: 'not-found' , component: PageNotFoundComponent},
+ {path: '**' , redirectTo: '/not-found'}
+
+ Note: {path: '**' , redirectTo: '/not-found'} This should be the last path otherwise we will get not found for every routing.
+
+ 
