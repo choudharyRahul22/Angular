@@ -37,6 +37,14 @@ npm uninstall -g @angular/cli
 npm cache clean
 npm install -g @angular/cli@latest
 
+How to upgrade the CLI
+-----------------------
+Run the below commands - only use "sudo" on Mac/ Linux.
+
+sudo npm uninstall -g angular-cli @angular/cli
+npm cache clean --force
+sudo npm install -g @angular/cli
+
 To create new angular project:
 ------------------------------
 "ng new project-name"
@@ -1637,6 +1645,64 @@ constructor(private userService: UserService) {}
       }
     );
   }
+
+Forms:
+------
+Two approaches : Template Driven and Recative
+To work with form FormsModule should be there in app.module.ts.
+
+On Form we can put local ref from where we get form ref, now angular read form element and create a javascript object which has all property of form to access it we use #localref="ngForm".
+
+Form:
+<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+        <div id="user-data">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="form-control" ngModel name="username">
+          </div>
+          <button class="btn btn-default" type="button">Suggest an Username</button>
+          <div class="form-group">
+            <label for="email">Mail</label>
+            <input type="email" id="email" class="form-control" ngModel name="email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="secret">Secret Questions</label>
+          <select id="secret" class="form-control" ngModel name="secret">
+            <option value="pet">Your first Pet?</option>
+            <option value="teacher">Your first teacher?</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+Component:
+
+  @ViewChild('f') signupForm: NgForm;
+
+  suggestUserName() {
+    const suggestedName = 'Superuser';
+  }
+
+  /*onSubmit(form: NgForm) {
+    console.log(form);
+  }*/
+
+  onSubmit() {
+    console.log(this.signupForm);
+  }
+
+Validate Form:
+--------------
+Built-in Validators & Using HTML5 Validation
+
+Which Validators do ship with Angular? 
+
+Check out the Validators class: https://angular.io/docs/ts/latest/api/forms/index/Validators-class.html - these are all built-in validators, though that are the methods which actually get executed (and which you later can add when using the reactive approach).
+
+For the template-driven approach, you need the directives. You can find out their names, by searching for "validator" in the official docs: https://angular.io/api?type=directive - everything marked with "D" is a directive and can be added to your template.
+
+Additionally, you might also want to enable HTML5 validation (by default, Angular disables it). You can do so by adding the ngNativeValidate  to a control in your template.
 
 
 
