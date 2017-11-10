@@ -1283,6 +1283,16 @@ Navigate on the other hand didnt remember whats your current page is, it always 
 example: if you are at /servers and click on reload than it dont know that you are on /servers and will look from root ie: / and go to 
 /servers.
 
+RouterLinkActive:
+-----------------
+<ul class="nav navbar-nav">
+        <li routerLinkActive="active"><a routerLink="/recipes" >Recipes</a></li>
+        <li routerLinkActive="active"><a routerLink="/shopping-list" >Shopping List</a></li>
+</ul>
+
+routerLinkActive directive take css class to mark as active as we are using bootstrap so we pass bootstrap class active.
+
+
 To Get URL Param:
 -----------------
 const appRoutes: Routes = [
@@ -1458,4 +1468,175 @@ Passing Query Param:
 
  Note: {path: '**' , redirectTo: '/not-found'} This should be the last path otherwise we will get not found for every routing.
 
- 
+Gaurd All App Routing:
+----------------------
+Protect app from accessing.
+
+AuthService:
+export class AuthService {
+  loggedIn = false;
+
+  isAuthenticated() {
+    const promise = new Promise(
+      (resolve , reject) => {
+        setTimeout(() => resolve(this.loggedIn), 800);
+      }
+    );
+
+    return promise;
+  }
+
+  login() {
+    this.loggedIn = true;
+  }
+
+  logout() {
+    this.loggedIn = false;
+  }
+}
+
+AuthGaurd:
+@Injectable()
+export class AuthGaurd implements CanActivate, CanActivateChild {
+
+  constructor(private authService: AuthService , private router: Router){}
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    return this.authService.isAuthenticated()
+      .then(
+        (authenticated: boolean) => {
+          if (authenticated) {
+            return true;
+          }else {
+            this.router.navigate(['/']);
+          }
+        }
+      );
+  }
+
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    return this.canActivate(route, state);
+  }
+}
+
+RoutingModule:
+{path: 'servers' ,
+    /*canActivate: [AuthGaurd]*/
+    canActivateChild: [AuthGaurd],
+    component: ServersComponent, children:[
+    {path: ':id' , component: ServerComponent},
+    {path: ':id/edit' , component: EditServerComponent}
+  ]},
+
+If we want to gaurd route and its child than use canActivate.
+If we want to gaurd only child route than use canActivateChild.
+
+
+Discard Changes:
+----------------
+
+
+Pass Data In Route:
+-------------------
+
+Observables:
+------------
+Obsbervables are emitter and observer are subscriber.
+import from 3rd party rxjs.
+we can attach Obsbervables to button click or http request (result or error).
+
+Three way to handle observable:
+1. Handle Data (Success Result)
+2. Handle Error (Error Result)
+3. Handle Completion (like http request, once we get response handle get complete).
+
+Obsbervable--> Handle Data , Handle Error, Handle Completion--> Observer.
+
+Earlier we use promises in angular 1 now we use observables in angular 2.
+
+Custom observable should be destory manually otherwise we will get memory leak issue.
+
+Example:
+
+
+  myNumberSubscription: Subscription;
+  myObservableSubscription: Subscription;
+
+  constructor() { }
+
+  ngOnInit() {
+    const  myNumber = Observable.interval(1000);
+
+    this.myNumberSubscription = myNumber.subscribe(
+      (number: number) =>
+        console.log(number);
+    )
+
+     const  myObservable = Observable.create(
+      (observer: Observer<string>) => {
+
+            setTimeout( () => {
+              observer.next('After 2000 second : Data');
+            }, 2000),
+
+            setTimeout( () => {
+              observer.next('After 4000 second : Data');
+            }, 4000),
+
+              setTimeout( () => {
+                observer.error('After 6000 second : Error');
+              }, 4000),
+
+              setTimeout( () => {
+                observer.complete();
+              }, 4000),
+
+            setTimeout( () => {
+              observer.next('After 10000 second **** Finish : Data');
+            }, 5000);
+      };
+
+      this.myObservableSubscription = myObservable.subscribe(
+        (data: string) => { console.log(data); },
+        (error: string) => { console.log(error); },
+        (complete: string) => { console.log('Completed'); },
+      );
+    );
+  }
+
+  ngOnDestroy() {
+      this.myNumberSubscription.unsubscribe();
+      this.myObservableSubscription.unsubscribe();
+  }
+
+Subject:
+--------
+work as both observable and observer at same time.
+
+Service:
+export class UserService {
+    userActivated = new Subject();
+}
+
+As observable or emitter:
+onActivate() {
+    this.userService.userActivated.next(this.id);
+  }
+
+As a observer or subscriber:
+constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.userService.userActivated.subscribe(
+      (id: number) => {
+        if(id === 1 ) {
+          this.user1Activated = true;
+        }else if (id === 2 ) {
+          this.user2Activated = true;
+        }
+      }
+    );
+  }
+
+
+
