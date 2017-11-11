@@ -1651,6 +1651,8 @@ Forms:
 Two approaches : Template Driven and Recative
 To work with form FormsModule should be there in app.module.ts.
 
+Template Driven Approach For Forms:
+-----------------------------------
 On Form we can put local ref from where we get form ref, now angular read form element and create a javascript object which has all property of form to access it we use #localref="ngForm".
 
 Form:
@@ -1705,4 +1707,365 @@ For the template-driven approach, you need the directives. You can find out thei
 Additionally, you might also want to enable HTML5 validation (by default, Angular disables it). You can do so by adding the ngNativeValidate  to a control in your template.
 
 
+Example:
+<div class="form-group">
+            <label for="email">Mail</label>
+            <input type="email"
+                   id="email"
+                   class="form-control"
+                   ngModel
+                   name="email"
+                   required
+                   email
+                   #email="ngModel"
+            >
+            <span class="help-block" *ngIf="!email.valid && email.touched">Please enter a valid email.</span>
+</div>
 
+Default Value in form:
+----------------------
+Give defualt value like for select multiple items.
+
+Example:
+Component:
+defaultQuestion = 'pet';
+
+Html:
+<div class="form-group">
+          <label for="secret">Secret Questions</label>
+          <select id="secret" class="form-control" ngModel name="secret" [ngModel]="defaultQuestion">
+            <option value="pet">Your first Pet?</option>
+            <option value="teacher">Your first teacher?</option>
+          </select>
+</div>
+
+Above [ngModel]="defaultQuestion" this recive pet from component, select will match the option with that and show on UI (Your first Pet?)
+
+Use of ngModel in Form:
+-----------------------
+As a control(tell angular that this form input need control, to add this in value property of angular form object):
+<input type="text" id="username" class="form-control" ngModel name="username" required >
+
+As a property Binding/one way binding:
+<select id="secret" class="form-control" ngModel name="secret" [ngModel]="defaultQuestion">
+
+As a Two way binding:
+<textarea name="questionAnswer" rows="3" class="form-control" [(ngModel)]="answer">{{answer}}</textarea>
+
+Group Form Controls:
+--------------------
+Group your controls(html element like input) which might come in same group help in large forms.
+
+<div id="user-data" ngModelGroup="userData" #userDataRef="ngModelGroup">
+	<div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="form-control" ngModel name="username" required >
+          </div>
+     <button class="btn btn-default" type="button">Suggest an Username</button>
+          <div class="form-group">
+            <label for="email">Mail</label>
+            <input type="email"
+                   id="email"
+                   class="form-control"
+                   ngModel
+                   name="email"
+                   required
+                   email
+                   #email="ngModel"
+            >
+            <span class="help-block" *ngIf="!email.valid && email.touched">Please enter a valid email.</span>
+          </div>
+</div>
+        <span class="help-block" *ngIf="!userDataRef.valid && userDataRef.touched">User Data (Username or Email) is not valid.</span>
+        
+Handling Radio Button:
+----------------------
+Component:
+defaultGender = 'male';
+
+Html:
+<div class="radio" *ngFor="let gender of genders">
+          <label>
+            <!--<input type="radio" name="gender" [ngModel]="defaultGender" [value]="gender">{{gender}}-->
+            <input type="radio" name="gender" ngModel [value]="gender" required>{{gender}}
+          </label>
+</div>
+
+Setting and Patching Form Value:
+--------------------------------
+We have set and patch property on form object. 
+As set value is not recomended so we didnt mention here but we can use as its avilable.
+
+Example:
+
+Html:
+<form (ngSubmit)="onSubmit()" #f="ngForm">
+        <div id="user-data" ngModelGroup="userData" #userDataRef="ngModelGroup">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="form-control" ngModel name="username" required >
+          </div>
+          <button class="btn btn-default" type="button" (click)="suggestUserName()">Suggest an Username</button>
+
+Component:
+suggestUserName() {
+    const suggestedName = 'Superuser';
+    this.signupForm.form.patchValue({
+      userData: {
+        username: suggestedName
+      }
+    });
+  }
+
+Use Form Data:
+--------------
+When we click on submit form data.
+
+Component:
+user = {
+    username: '',
+    email: '',
+    secret: '',
+    questionAnswer: '',
+    gender: '',
+  };
+  submitted = false;
+
+onSubmit() {
+    console.log(this.signupForm);
+    this.submitted = true;
+    this.user.username = this.signupForm.value.userData.username;
+    this.user.email = this.signupForm.value.userData.email;
+    this.user.secret = this.signupForm.value.secret;
+    this.user.questionAnswer = this.signupForm.value.questionAnswer;
+    this.user.gender = this.signupForm.value.gender;
+  }
+
+Html:
+<div class="row" *ngIf="submitted">
+      <div class="col-xs-12">
+          <h3>Your Data</h3>
+          <p>Username : {{user.username}}</p>
+          <p>Email : {{user.email}}</p>
+          <p>Secret Question : Your first {{user.secret}}</p>
+          <p>Answer : {{user.questionAnswer}}</p>
+          <p>Gender : {{user.gender}}</p>
+      </div>
+</div>
+
+Reset Form Data:
+----------------
+this.signupForm.reset();
+
+Reactive Approach For Forms:
+----------------------------
+Component:
+signupForm: FormGroup;
+
+  ngOnInit() {
+    this.signupForm = new FormGroup({
+      'username' : new FormControl(null),
+      'email' : new FormControl(null),
+      'gender' : new FormControl('male'),
+    });
+
+  }
+
+Html:
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            class="form-control" required>
+          <span class="help-block" *ngIf="!signupForm.get('username').valid && signupForm.get('username').touched">Please enter a valid Username.</span>
+        </div>
+        <div class="form-group">
+          <label for="email">email</label>
+          <input
+            type="text"
+            id="email"
+            formControlName="email"
+            class="form-control"
+          required
+          email>
+          <span class="help-block" *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched">Please enter a valid Email.</span>
+        </div>
+        <div class="radio" *ngFor="let gender of genders" >
+          <label>
+            <input
+              type="radio"
+              [value]="gender"
+              formControlName="gender" required>{{ gender }}
+          </label>
+        </div>
+        <span class="help-block" *ngIf="!signupForm.valid && signupForm.touched">Please enter a valid Data.</span>
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </form>
+
+Validating Form:
+----------------
+<input
+            type="text"
+            id="username"
+            formControlName="username"
+            class="form-control" required>
+          <span class="help-block" *ngIf="!signupForm.get('username').valid && signupForm.get('username').touched">Please enter a valid Username.</span>
+        
+Grouping Controls:
+------------------
+Html:
+<div formGroupName="userData">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              class="form-control" required>
+            <span class="help-block" *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched">Please enter a valid Username.</span>
+          </div>
+          <div class="form-group">
+            <label for="email">email</label>
+            <input
+              type="text"
+              id="email"
+              formControlName="email"
+              class="form-control"
+              required
+              email>
+            <span class="help-block" *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched">Please enter a valid Email.</span>
+          </div>
+</div>
+
+Component:
+ngOnInit() {
+    this.signupForm = new FormGroup({
+      'userData' : new FormGroup({
+        'username' : new FormControl(null),
+        'email' : new FormControl(null)
+      }),
+      'gender' : new FormControl('male'),
+    });
+
+  }
+
+Add Form Array Data:
+--------------------
+FormArray takes array of FormControl
+When we click on button Add Hoby, onAddHoby function will run 
+onAddHobby() {
+    console.log('button clicked');
+    const control = new FormControl(null, Validators.required);
+    (<FormArray>this.signupForm.get('hobbies')).push(control);
+  }
+This function first create a FormControl object with param null and validator.Here null is what we see in input box when button is clicked
+here we put null that mean input box will be empty, we can also do like.
+onAddHobby() {
+    console.log('button clicked');
+    const control = new FormControl('First time clicked', Validators.required);
+    (<FormArray>this.signupForm.get('hobbies')).push(control);
+  }
+This will create a input box when button Add Hoby will be clicked with value 'First time clicked'.
+
+Second Like:
+(<FormArray>this.signupForm.get('hobbies')).push(control);
+This will put the new FormControl on hobbies FromArray.
+
+Third UI Part:
+<div formArrayName="hobbies">
+          <h4>Your Hobbies</h4>
+          <button (click)="onAddHobby()" class="btn btn-default" type="button">Add Hobby</button>
+          <div class="form-group" *ngFor="let hobbyControl of signupForm.get('hobbies').controls; let i = index">
+            <input type="text" class="form-control" [formControlName]="i">
+          </div>
+</div>
+
+Here:
+*ngFor="let hobbyControl of signupForm.get('hobbies').controls; let i = index"
+This will loop over the array, currently first time when button is clicked we have only one FormControl with null value on FormArray.
+
+So we will see the input box with nothing on first clicked.
+
+Second time we click it will again add a new FormControl with null value to FormArray.
+Again ngFor loop over FormArray (hobbies) and find we have already one FormControl ie: last value.
+So we will see previous value and new input empty text box.
+
+Now we know every FromControl has a formControlName like we have 'username' and 'email'.
+<input type="text" class="form-control" [formControlName]="i">
+But this is dynamicaaly created so we put the index number as the FormControlName.
+
+So for first clicked: formControlName 0 and value 'that we enter'.
+& for Second clicked: formControlName 1 and value 'that we enter'.
+
+Custom validator:
+-----------------
+Validator are functions that angular call.
+We can create a custom validator or function and call it on FormControl.
+Custom validator function takes FormControl as agrument.
+
+forbiddenUserames = ['rahul', 'ravi'];
+
+'username' : new FormControl(null, [Validators.required, this.forbiddenNames.bind(this)]),
+
+forbiddenNames(control: FormControl): {[s: string] : boolean} {
+    if(this.forbiddenUserames.indexOf(control.value) !== -1) {
+      return {nameIsForbidden: true};
+    }
+    return null;
+  }
+
+Error Messages:
+---------------
+<span class="help-block" *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched">
+              <span *ngIf="signupForm.get('userData.username').errors['nameIsForbidden']">This name is invalid</span>
+              <span *ngIf="signupForm.get('userData.username').errors['required']">Please enter a valid Username</span>
+</span>
+
+Asynchronous Error:
+-------------------
+'email' : new FormControl(null,[ Validators.required,  Validators.email] , this.forbiddenEmail.bind(this))
+
+forbiddenEmail(control: FormControl): Promise<any> | Observable<any> {
+    const promise = new Promise<any>(
+      (resolve, reject) => {
+        setTimeout(() => {
+          if (control.value === 'rahulchaudhary22051990@gmail.com') {
+            return resolve({'emailIsForbidden': true});
+          } else {
+            return resolve(null);
+          }
+        }, 1500);
+      }
+    );
+    return promise;
+  }
+
+Status and Value Change:
+------------------------
+this.signupForm.valueChanges.subscribe(
+      (value) => {console.log(value)}
+    );
+
+this.signupForm.statusChanges.subscribe(
+      (status) => {console.log(status)}
+    );
+
+Setting and Patching Value:
+---------------------------
+this.signupForm.setValue({
+      'userData': {
+        'username' : 'Rahul_Choudhary',
+        'email': 'rahul@gmail.com'
+      },
+      'gender': 'male',
+      'hobbies' : []
+    });
+
+    this.signupForm.patchValue({
+      'userData': {
+        'username' : 'Shalu_Choudhary',
+      },
+    });
