@@ -2117,7 +2117,7 @@ Edit mode here means that in form where we add new item we will see the update i
 <a class="list-group-item" style="cursor: pointer" *ngFor="let ingredient of ingredients; let i = index"
       (click)="onEditItem(i)">{{ingredient.name}} ({{ingredient.amount}})</a>
 
-2. Then we create a Object(event) in Service 
+2. Then we create a Object(event) in Service:
 startedEditing = new Subject<number>();
 
 3. On click function we add the index to service Object(event).
@@ -2156,7 +2156,7 @@ Service :
 <button class="btn btn-success" type="submit" [disabled]="!f.valid">{{editMode ? 'Update' : 'Add'}}</button>
 
 6. Finally on click Add or Update:
-onAddItem(form: NgForm) {
+onSubmit(form: NgForm) {
     const value = form.value;
     const newIngredient = new Ingredient(value.name, value.amount );
     if(this.editMode) {
@@ -2164,7 +2164,8 @@ onAddItem(form: NgForm) {
     }else {
       this.shoppingListService.addIngredient(newIngredient);
     }
-
+    this.editMode = false;
+    form.reset();
   } 
 
 Service:
@@ -2178,3 +2179,49 @@ addIngredients(ingredients: Ingredient[]) {
     this.ingredientChanged.next(this.ingredients.slice());
   }
 
+7. Clear Items:
+<button class="btn btn-primary" type="button" (click)="onClear()">Clear</button>
+
+onClear() {
+    this.shoppingListForm.reset();
+    this.editMode = false;
+  }
+
+8. Delete Items:
+<button class="btn btn-danger" type="button" (click)="onDelete()">Delete</button>
+
+ onDelete() {
+    this.onClear();
+    this.shoppingListService.deleteIngredient(this.editItemIndex);
+  }
+
+Reactive Form:
+--------------
+1. attach FormGroup directive as property
+<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+This tell to angular that overall form is manage by us so dont manage this form.
+We give our form object as FormGroup to formGroup directive.
+recipeForm: FormGroup;
+
+private initForm() {
+    let recipeName = '';
+    let recipeImagePath = '';
+    let recipeDescription = '';
+
+    if (this.editMode) {
+      const recipe = this.recipeService.getRecipeById(this.id);
+      recipeName = recipe.name;
+      recipeImagePath = recipe.imagePath;
+      recipeDescription = recipe.description;
+    }
+
+    this.recipeForm = new FormGroup({
+      'name' : new FormControl(recipeName),
+      'imagePath' : new FormControl(recipeImagePath),
+      'description' : new FormControl(recipeDescription),
+    });
+  }
+and call this initForm() in component init
+
+2. We register the control using FormControlName to inputs 
+<input type="text" id="name" class="form-control" formControlName="name">
