@@ -1653,7 +1653,30 @@ To work with form FormsModule should be there in app.module.ts.
 
 Template Driven Approach For Forms:
 -----------------------------------
-On Form we can put local ref from where we get form ref, now angular read form element and create a javascript object which has all property of form to access it we use #localref="ngForm".
+On Form we can put local ref from where we get form ref, now angular read form element and create a javascript object which has all property of form. To access it we use #localref="ngForm".
+
+So localRef is Form element refernece and ngForm is the javascript object created by angular behind the scen.
+We provide the ngForm to Form element ref by '#localref="ngForm"'.
+
+Now we pass the javascript form object to onSubmit(f) function like
+(ngSubmit)="onSubmit(f)"
+
+In Below line:
+<input type="text" id="username" class="form-control" ngModel name="username">
+
+For the above input we give the name of Control using:
+name="username"
+And register this input as a Control by using ngModel.
+ngModel
+
+We pass the Form Object as (ngSubmit)="onSubmit(f)
+
+In component:
+onSubmit(form: NgForm) {
+    const value = form.value;
+    console.log(value);
+  }
+
 
 Form:
 <form (ngSubmit)="onSubmit(f)" #f="ngForm">
@@ -1706,6 +1729,20 @@ For the template-driven approach, you need the directives. You can find out thei
 
 Additionally, you might also want to enable HTML5 validation (by default, Angular disables it). You can do so by adding the ngNativeValidate  to a control in your template.
 
+First validation is required, if that feild will be empty we will get form object valid property will be false.
+f.valid 
+
+Another validation: this will make sure only postive integer will be entered in feild.
+pattern="^[1-9]+[0-9]*$"
+
+Another validation: email
+which will check the email pattern in feild.
+
+Now we check the validation :
+<span class="help-block" *ngIf="!email.valid && email.touched">Please enter a valid email.</span>
+
+On Submit button we can add a check to disable button until it is invalid.
+<button class="btn btn-success" type="submit" [disabled]="!f.valid">Add</button>
 
 Example:
 <div class="form-group">
@@ -2069,3 +2106,75 @@ this.signupForm.setValue({
         'username' : 'Shalu_Choudhary',
       },
     });
+
+Update Item In Form:
+--------------------
+Example: We have an List of item when we click on a single item we should see it in edit mode.
+
+Edit mode here means that in form where we add new item we will see the update item details there only no new edit ui will be displayed.
+
+1. On the list item we will add a click listner to which we pass index
+<a class="list-group-item" style="cursor: pointer" *ngFor="let ingredient of ingredients; let i = index"
+      (click)="onEditItem(i)">{{ingredient.name}} ({{ingredient.amount}})</a>
+
+2. Then we create a Object(event) in Service 
+startedEditing = new Subject<number>();
+
+3. On click function we add the index to service Object(event).
+onEditItem(index: number) {
+      this.shoppingListService.startedEditing.next(index);
+  }
+
+4. We subscribe to Subject in Shopping Edit Component.
+
+@ViewChild('f') shoppingListForm: NgForm;
+  editingSubscription: Subscription;
+  editMode = false;
+  editItemIndex: number;
+  editedItem: Ingredient;
+
+ngOnInit() {
+    this.editingSubscription = this.shoppingListService.startedEditing.subscribe(
+      (index: number) => {
+        this.editItemIndex = index;
+        this.editMode = true;
+        this.editedItem = this.shoppingListService.getIngredientByIndex(this.editItemIndex);
+        this.shoppingListForm.setValue({
+          'name': this.editedItem.name,
+          'amount': this.editedItem.amount
+        });
+      }
+    );
+  }
+
+Service :
+ getIngredientByIndex(index: number) {
+    return this.ingredients[index];
+  }
+
+5. Dynamically Change button From Add to Update :
+<button class="btn btn-success" type="submit" [disabled]="!f.valid">{{editMode ? 'Update' : 'Add'}}</button>
+
+6. Finally on click Add or Update:
+onAddItem(form: NgForm) {
+    const value = form.value;
+    const newIngredient = new Ingredient(value.name, value.amount );
+    if(this.editMode) {
+      this.shoppingListService.updateIngredient(this.editItemIndex, newIngredient);
+    }else {
+      this.shoppingListService.addIngredient(newIngredient);
+    }
+
+  } 
+
+Service:
+updateIngredient(index: number, newIngredient: Ingredient) {
+    this.ingredients[index] = newIngredient;
+    this.ingredientChanged.next(this.ingredients.slice());
+  }
+
+addIngredients(ingredients: Ingredient[]) {
+    this.ingredients.push(...ingredients);
+    this.ingredientChanged.next(this.ingredients.slice());
+  }
+
