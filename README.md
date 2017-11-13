@@ -2225,3 +2225,4 @@ and call this initForm() in component init
 
 2. We register the control using FormControlName to inputs 
 <input type="text" id="name" class="form-control" formControlName="name">
+
