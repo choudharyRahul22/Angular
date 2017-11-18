@@ -2520,33 +2520,4 @@ infogainindiapvt@gmail.com
 admin1@#$%^
 https://tracker-20aae.firebaseio.com/
 
-Month:
-Jira Id:
-Customer:
-Description:
-Developer:
-Defect Type (External/ Internal):
-Start Date:
-End Date:
-Status:
-Step To Reproduce:
-Follow Up With GS2:
-
-Environment Setup:
-Analysis:
-Developement:
-Code Review:
-Provided Support to QA:
-Rework:
-
-Porting Required (Yes/No):
-Porting JIRA ID
-Reason (Incase the defect is NOT ported)
-Total Effort (excluding porting & follow-up)
-Complexity	
-Context Switch(Yes/No)
-MonthCode	
-Duplicate
-
-
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-tracker',
@@ -21,6 +22,7 @@ export class TrackerComponent implements OnInit {
   contextSwitch = ['Yes' , 'No'];
   dublicate = ['Yes' , 'No'];
 
+  recipeForm: FormGroup;
   constructor() { }
 
   ngOnInit() {
