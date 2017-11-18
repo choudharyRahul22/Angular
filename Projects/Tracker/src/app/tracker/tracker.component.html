@@ -1,14 +1,14 @@
 <div class="row">
 
   <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-    <form (ngSubmit)="onSubmit()">
+    <form [formGroup]="trackerForm" (ngSubmit)="onSubmit()">
       <h3 style="text-align: center">Jira Description</h3>
       <!-- Month -->
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
             <label for="month">Month</label>
-            <select class="form-control" id="month">
+            <select class="form-control" id="month" formControlName="monthName">
               <option *ngFor="let mn of monthName">{{mn}}</option>
             </select>
           </div>
@@ -23,7 +23,7 @@
             <input
               type="text"
               id="jiraId"
-              class="form-control">
+              class="form-control" formControlName="jiraId">
           </div>
         </div>
       </div>
@@ -33,8 +33,8 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label for="developerName">Customer Name</label>
-            <select class="form-control" id="developerName">
+            <label for="customerName">Customer Name</label>
+            <select class="form-control" id="customerName" formControlName="customerName">
               <option *ngFor="let cn of customerName">{{cn}}</option>
             </select>
           </div>
@@ -45,11 +45,11 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label for="description">Jira Description</label>
+            <label for="jiraDescription">Jira Description</label>
             <input
               type="text"
-              id="description"
-              class="form-control">
+              id="jiraDescription"
+              class="form-control" formControlName="jiraDescription">
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="developerName">Developer</label>
-            <select class="form-control" id="developerName">
+            <select class="form-control" id="developerName" formControlName="developerName">
               <option *ngFor="let dn of developerName">{{dn}}</option>
             </select>
           </div>
@@ -73,7 +73,7 @@
             <label>Priority</label>
             <div class="radio-inline" *ngFor="let p of priority">
               <li>
-                <input type="radio" name="priority">{{p}}
+                <input type="radio" name="priority" formControlName="priority">{{p}}
               </li>
             </div>
           </div>
@@ -89,7 +89,7 @@
             <label>Severity</label>
             <div class="radio-inline" *ngFor="let s of severity">
               <li>
-                <input type="radio" name="priority">{{s}}
+                <input type="radio" name="severity" formControlName="severity">{{s}}
               </li>
             </div>
           </div>
@@ -104,7 +104,7 @@
             <input
               type="text"
               id="version"
-              class="form-control">
+              class="form-control" formControlName="version">
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@
             <input
               type="date"
               id="etaToFix"
-              class="form-control">
+              class="form-control" formControlName="etaToFix">
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@
             <label>Defect Type</label>
             <div class="radio-inline" *ngFor="let dt of defectType">
               <li>
-                <input type="radio" name="priority">{{dt}}
+                <input type="radio" name="defectType" formControlName="defectType">{{dt}}
               </li>
             </div>
           </div>
@@ -139,19 +139,6 @@
       <hr>
       <h3 style="text-align: center">Defect Status</h3>
 
-      <!-- Developer -->
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="form-group">
-            <label for="developerName">Developer Name</label>
-            <input
-              type="text"
-              id="developerName"
-              class="form-control">
-          </div>
-        </div>
-      </div>
-
       <!-- Start Date -->
       <div class="row">
         <div class="col-xs-12">
@@ -160,7 +147,7 @@
             <input
               type="date"
               id="startDate"
-              class="form-control">
+              class="form-control" formControlName="startDate">
           </div>
         </div>
       </div>
@@ -173,7 +160,7 @@
             <input
               type="date"
               id="endDate"
-              class="form-control">
+              class="form-control" formControlName="endDate">
           </div>
         </div>
       </div>
@@ -182,8 +169,8 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label for="sel1">Jira Status</label>
-            <select class="form-control" id="sel1">
+            <label for="jiraStatus">Jira Status</label>
+            <select class="form-control" id="jiraStatus" formControlName="status">
               <option *ngFor="let st of status">{{st}}</option>
             </select>
          </div>
@@ -198,7 +185,7 @@
             <label>Step To Reproduce</label>
             <div class="radio-inline" *ngFor="let str of stepToReproduce">
               <li>
-                <input type="radio" name="priority">{{str}}
+                <input type="radio" name="stepToReproduce" formControlName="stepToReproduce">{{str}}
               </li>
             </div>
           </div>
@@ -210,7 +197,7 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="stepToReproduceDetailsIfAny">Steps to Reproduce - Details if any</label>
-            <textarea name="stepToReproduceDetailsIfAny" rows="3" class="form-control"></textarea>
+            <textarea name="stepToReproduceDetailsIfAny" rows="3" class="form-control" formControlName="stepToReproduceDetailsIfAny"></textarea>
           </div>
         </div>
       </div>
@@ -222,7 +209,7 @@
             <label>Follow Up With GS2</label>
             <div class="radio-inline" *ngFor="let fuwgs2 of followUpWithGS2">
               <li>
-                <input type="radio">{{fuwgs2}}
+                <input type="radio" formControlName="followUpWithGS2">{{fuwgs2}}
               </li>
             </div>
           </div>
@@ -240,7 +227,7 @@
             <input
               type="number"
               id="environmentSetup"
-              class="form-control">
+              class="form-control" formControlName="environmentSetup">
           </div>
         </div>
       </div>
@@ -253,7 +240,7 @@
             <input
               type="number"
               id="analysis"
-              class="form-control">
+              class="form-control" formControlName="analysis">
           </div>
         </div>
       </div>
@@ -266,7 +253,7 @@
             <input
               type="number"
               id="devlopement"
-              class="form-control">
+              class="form-control" formControlName="devlopement">
           </div>
         </div>
       </div>
@@ -279,7 +266,7 @@
             <input
               type="number"
               id="codeReview"
-              class="form-control">
+              class="form-control" formControlName="codeReview">
           </div>
         </div>
       </div>
@@ -292,7 +279,7 @@
             <input
               type="number"
               id="providedSupportToQA"
-              class="form-control">
+              class="form-control" formControlName="providedSupportToQA">
           </div>
         </div>
       </div>
@@ -305,7 +292,7 @@
             <input
               type="number"
               id="rework"
-              class="form-control">
+              class="form-control" formControlName="rework">
           </div>
         </div>
       </div>
@@ -320,7 +307,7 @@
             <label>Porting Required</label>
             <div class="radio-inline" *ngFor="let pr of portingRequired">
               <li>
-                <input type="radio">{{pr}}
+                <input type="radio" formControlName="portingRequired">{{pr}}
               </li>
             </div>
           </div>
@@ -336,7 +323,7 @@
             <input
               type="text"
               id="portingJiraId"
-              class="form-control">
+              class="form-control" formControlName="portingJiraId">
           </div>
         </div>
       </div>
@@ -350,7 +337,7 @@
             <input
               type="number"
               id="portingEffort"
-              class="form-control">
+              class="form-control" formControlName="portingEffort">
           </div>
         </div>
       </div>
@@ -360,7 +347,7 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="reason">Reason (Incase the defect is NOT ported)</label>
-            <textarea name="reason" rows="3" class="form-control" ></textarea>
+            <textarea name="reason" rows="3" class="form-control" formControlName="reason"></textarea>
           </div>
         </div>
       </div>
@@ -374,7 +361,7 @@
             <input
               type="number"
               id="totalEffort"
-              class="form-control">
+              class="form-control" formControlName="totalEffort">
           </div>
         </div>
       </div>
@@ -384,7 +371,7 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="complexity">Complexity</label>
-            <select class="form-control" id="complexity">
+            <select class="form-control" id="complexity" formControlName="complexity">
               <option *ngFor="let c of complexity">{{c}}</option>
             </select>
           </div>
@@ -398,7 +385,7 @@
             <label >Context Switch</label>
             <div class="radio-inline" *ngFor="let cs of contextSwitch">
               <li>
-                <input type="radio">{{cs}}
+                <input type="radio" formControlName="contextSwitch">{{cs}}
               </li>
             </div>
           </div>
@@ -413,7 +400,7 @@
             <input
               type="text"
               id="monthCode"
-              class="form-control">
+              class="form-control" formControlName="monthCode">
           </div>
         </div>
       </div>
@@ -425,7 +412,7 @@
             <label >Duplicate</label>
             <div class="radio-inline" *ngFor="let d of dublicate">
               <li>
-                <input type="radio">{{d}}
+                <input type="radio" formControlName="dublicate">{{d}}
               </li>
             </div>
           </div>
@@ -441,7 +428,7 @@
           <button
             type="submit"
             class="btn btn-success"
-            [disabled]="">Save</button>
+            >Save</button>
           <button type="button" class="btn btn-primary" (click)="onUpdate()">Update</button>
           <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>
