@@ -2226,3 +2226,327 @@ and call this initForm() in component init
 2. We register the control using FormControlName to inputs 
 <input type="text" id="name" class="form-control" formControlName="name">
 
+Pipes:
+------
+Transform output in our template.
+Pipes applied from left to right.
+https://angular.io/api/
+ng g p pipeName
+
+Shorten Pipe:
+import {Pipe, PipeTransform} from "@angular/core";
+@Pipe({
+  name: 'shorten'
+})
+export class ShortenPipe implements PipeTransform {
+
+    transform(value: any, limit: number, start: number) {
+
+      if (value.length > limit) {
+        return value.substring(start, limit) + ' ...';
+      }
+      return value;
+    }
+
+}
+
+Filter Pipe:
+export class FilterPipe implements PipeTransform {
+
+  transform(value: any, filterString: string, propName: string): any {
+    if(value.length === 0 || filterString === '') {
+      return value;
+    }
+
+    const resultArray = [];
+    for (const item of value) {
+      if (item[propName] === filterString) {
+        resultArray.push(item);
+      }
+    }
+    return resultArray;
+  }
+
+Html:
+<div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <input type="text" [(ngModel)]="filterStatus">
+      <button type="button" class="btn btn-success" (click)="onAddServer()">Add Server</button>
+      <br><br>
+      <h2>App Status : {{appStatus | async}}</h2>
+      <hr>
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          *ngFor="let server of servers | filter:filterStatus:'status'"
+          [ngClass]="getStatusClasses(server)">
+          <span
+            class="badge">
+            {{ server.status }}
+          </span>
+          <strong>{{ server.name | shorten: 12 }}</strong> | {{ server.instanceType | uppercase }} | {{ server.started | date: 'fullDate'}}
+        </li>
+      </ul>
+    </div>
+
+Note:
+whenever pipe is applied on data and data might change in background we cant see the change.
+To enable that we need to add below:
+@Pipe({
+  name: 'shorten',
+  pure: false
+})
+Dont do above as if data is very large we get performance issue as pipe will be triggered at every data change.
+
+Http:
+-----
+Normally we send request and we get html back in response like jsp.
+But in angular we send request and we get json in response.
+we show the json in our SPA.
+
+Use firebase to host your api
+https://console.firebase.google.com
+
+Html:
+<button class="btn btn-primary" (click)="onSaveServers()">Save Servers</button>
+
+Component:
+onSaveServers() {
+    this.serversService.storeServers(this.servers)
+      .subscribe(
+        (response) => {console.log(response)},
+        (error) => {console.log(error)}
+      );
+  }
+
+Service:
+constructor(private http: Http) { }
+storeServers(servers: any[]) {
+    const headers = new Headers({'companyName': 'Optum', 'employeeName': 'Rahul Choudhary'})
+    return this.http.post('https://angularserver-3be32.firebaseio.com/data.json' , servers, {headers: headers});
+  }
+
+Get Data:
+Service:
+getServers() {
+    return this.http.get('https://angularserver-3be32.firebaseio.com/data.json');
+  }
+
+Component:
+onGetServers() {
+    this.serversService.getServers()
+      .subscribe(
+        (response) => {
+          const data = response.json();
+          console.log(data);
+        },
+        (error) => {console.log(error)}
+      );
+  }
+
+Note: This const data = response.json();
+.json will give javascript object.
+
+map():
+------
+will get data from observable and transform the response/data and wrap it again or gives back a observable again.
+
+Service:
+getServers() {
+    return this.http.get('https://angularserver-3be32.firebaseio.com/data.json')
+      .map(
+        (response: Response) => {
+          const data = response.json();
+          /*for (const server of data) {
+            server.name = 'Fetched_' + server.name;
+          }*/
+          return data;
+        }
+      );
+
+Component:
+onGetServers() {
+    this.serversService.getServers()
+      .subscribe(
+        (servers: any[]) => {
+          console.log(servers);
+          this.servers = servers;
+        },
+        (error) => {console.log(error)}
+      );
+  }
+
+Http Authentication:
+--------------------
+Traditional web app we have client and server. we send request from client and server will check the username and password and creates a session and sends back the html with some cookie and on next request server will check the cookie and see the client has valid session and provide the resource.
+
+In SPA we have client and server, but on request we are taking the response as json no html is dynamically genrated by the server as html is maintain by the angular.
+We send the auth request first time with username and password server authenticate user and send back the token (token is a algo based hash code) client get this token in response for first time and on every request it will attach this token, server recives this token and as this token is genrated by the server, server will be able to decript the token and found user has valid session no need to authenticate the user again.
+
+Store the token in localstorage and once user logout remove thr token from localstorage.
+
+Firebase: automatically stores the token in localstorage for us once the user is authenticated.
+
+Want to learn about the Token which is exchanged? 
+The following page should be helpful: https://jwt.io/ - specifically, the introduction: https://jwt.io/introduction/
+
+SignUp Html:
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+    <form (ngSubmit)="onSignUp(f)" #f="ngForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" ngModel class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" ngModel class="form-control">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+  </div>
+</div>
+
+SignUpComponent:
+export class SignupComponent implements OnInit {
+
+  constructor(private authService: AuthService) { }
+
+  ngOnInit() {
+  }
+
+  onSignUp(form: NgForm) {
+    const email = form.value.email;
+    const password = form.value.password;
+    this.authService.signupUser(email, password);
+  }
+
+}
+
+AuthService:
+signupUser(email: string, password: string) {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .catch(
+        error => console.log(error)
+      );
+  }
+
+SignIn Html:
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+    <form (ngSubmit)="onSignIn(f)" #f="ngForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" ngModel class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" ngModel class="form-control">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+  </div>
+</div>
+
+SignInComponent:
+export class SignComponent implements OnInit {
+
+  constructor(private authService: AuthService) { }
+
+  ngOnInit() {
+  }
+
+  onSignIn(form: NgForm) {
+    const email = form.value.email;
+    const password = form.value.password;
+    this.authService.signinUser(email, password);
+  }
+
+}
+
+AuthService:
+token: string;
+
+constructor(private router: Router, private route: ActivatedRoute) { }
+
+signinUser(email: string, password: string) {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(
+        response => {
+          this.router.navigate(["/recipes"]);
+          firebase.auth().currentUser.getToken()
+            .then(
+              (tokenRec: string) => {
+                this.token = tokenRec;
+              }
+            );
+        }
+      )
+      .catch(
+        error => console.log(error)
+      );
+  }
+
+  getToken() {
+    firebase.auth().currentUser.getToken().
+    then(
+      (tokenRec: string) => {
+        this.token = tokenRec;
+      }
+    );
+    return this.token;
+  }
+
+  logout() {
+    firebase.auth().signOut();
+    this.token = null;
+    this.router.navigate(["/signin"]);
+  }
+
+  isAuthenticated() {
+    return this.token != null;
+  }
+
+Module and Optimize Application:
+--------------------------------
+
+Tracker:
+--------
+
+infogainindiapvt@gmail.com
+admin1@#$%^
+https://tracker-20aae.firebaseio.com/
+
+Month:
+Jira Id:
+Customer:
+Description:
+Developer:
+Defect Type (External/ Internal):
+Start Date:
+End Date:
+Status:
+Step To Reproduce:
+Follow Up With GS2:
+
+Environment Setup:
+Analysis:
+Developement:
+Code Review:
+Provided Support to QA:
+Rework:
+
+Porting Required (Yes/No):
+Porting JIRA ID
+Reason (Incase the defect is NOT ported)
+Total Effort (excluding porting & follow-up)
+Complexity	
+Context Switch(Yes/No)
+MonthCode	
+Duplicate
+
+
+
