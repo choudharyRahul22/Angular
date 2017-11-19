@@ -15,6 +15,7 @@ import {DataStorageService} from "./shared/data-storage.service";
 import { TrackComponent } from './track/track.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {AuthGaurdService} from "./auth/auth-gaurd.service";
+import { YourFindingsComponent } from './your-findings/your-findings.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {AuthGaurdService} from "./auth/auth-gaurd.service";
     TrackerComponent,
     TrackComponent,
     DashboardComponent,
+    YourFindingsComponent,
   ],
   imports: [
     BrowserModule,
