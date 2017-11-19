@@ -14,6 +14,7 @@ import {TrackerService} from "./shared/tracker.service";
 import {DataStorageService} from "./shared/data-storage.service";
 import { TrackComponent } from './track/track.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {AuthGaurdService} from "./auth/auth-gaurd.service";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [AuthService, TrackerService, DataStorageService],
+  providers: [AuthService, TrackerService, DataStorageService, AuthGaurdService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
