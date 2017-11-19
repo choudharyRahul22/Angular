@@ -8,8 +8,8 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="month">Month</label>
-            <select class="form-control" id="month" formControlName="monthName">
-              <option *ngFor="let mn of monthName">{{mn}}</option>
+            <select class="form-control" id="month" formControlName="monthName" [ngModel]="defaultMonthName.monthName">
+              <option *ngFor="let mn of monthName" [selected]="mn.monthName === defaultMonthName.monthName">{{mn.monthName}}</option>
             </select>
           </div>
         </div>
@@ -58,9 +58,9 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label for="developerName">Developer</label>
-            <select class="form-control" id="developerName" formControlName="developerName">
-              <option *ngFor="let dn of developerName">{{dn}}</option>
+            <label for="developerName">Developer Name</label>
+            <select class="form-control" id="developerName" name="developerName" formControlName="developerName" [ngModel]="defaultDeveloperName.name">
+              <option *ngFor="let dn of developerName" [selected]="dn.id === defaultDeveloperName.empId">{{dn.name}}</option>
             </select>
           </div>
         </div>
@@ -70,10 +70,10 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label>Priority</label>
+            <label for="priority">Priority</label>
             <div class="radio-inline" *ngFor="let p of priority">
               <li>
-                <input type="radio" name="priority" formControlName="priority">{{p}}
+                <input id="priority" type="radio" name="priority" formControlName="priority" [value]="p">{{p}}
               </li>
             </div>
           </div>
@@ -86,10 +86,10 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label>Severity</label>
+            <label for="severity">Severity</label>
             <div class="radio-inline" *ngFor="let s of severity">
               <li>
-                <input type="radio" name="severity" formControlName="severity">{{s}}
+                <input id="severity" type="radio" name="severity" formControlName="severity" [value]="s">{{s}}
               </li>
             </div>
           </div>
@@ -126,10 +126,10 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label>Defect Type</label>
+            <label for="defectType">Defect Type</label>
             <div class="radio-inline" *ngFor="let dt of defectType">
               <li>
-                <input type="radio" name="defectType" formControlName="defectType">{{dt}}
+                <input id="defectType" type="radio" name="defectType" formControlName="defectType" [value]="dt">{{dt}}
               </li>
             </div>
           </div>
@@ -182,10 +182,10 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label>Step To Reproduce</label>
+            <label for="stepToReproduce">Step To Reproduce</label>
             <div class="radio-inline" *ngFor="let str of stepToReproduce">
               <li>
-                <input type="radio" name="stepToReproduce" formControlName="stepToReproduce">{{str}}
+                <input id="stepToReproduce" type="radio" name="stepToReproduce" formControlName="stepToReproduce" [value]="str">{{str}}
               </li>
             </div>
           </div>
@@ -197,7 +197,7 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="stepToReproduceDetailsIfAny">Steps to Reproduce - Details if any</label>
-            <textarea name="stepToReproduceDetailsIfAny" rows="3" class="form-control" formControlName="stepToReproduceDetailsIfAny"></textarea>
+            <textarea id="stepToReproduceDetailsIfAny" name="stepToReproduceDetailsIfAny" rows="3" class="form-control" formControlName="stepToReproduceDetailsIfAny"></textarea>
           </div>
         </div>
       </div>
@@ -206,10 +206,10 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label>Follow Up With GS2</label>
+            <label for="followUpWithGS2">Follow Up With GS2</label>
             <div class="radio-inline" *ngFor="let fuwgs2 of followUpWithGS2">
               <li>
-                <input type="radio" formControlName="followUpWithGS2">{{fuwgs2}}
+                <input id="followUpWithGS2" type="radio" formControlName="followUpWithGS2" [value]="fuwgs2">{{fuwgs2}}
               </li>
             </div>
           </div>
@@ -304,10 +304,10 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label>Porting Required</label>
+            <label for="portingRequired">Porting Required</label>
             <div class="radio-inline" *ngFor="let pr of portingRequired">
               <li>
-                <input type="radio" formControlName="portingRequired">{{pr}}
+                <input id="portingRequired" type="radio" formControlName="portingRequired" [value]="pr">{{pr}}
               </li>
             </div>
           </div>
@@ -382,10 +382,10 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label >Context Switch</label>
+            <label for="contextSwitch">Context Switch</label>
             <div class="radio-inline" *ngFor="let cs of contextSwitch">
               <li>
-                <input type="radio" formControlName="contextSwitch">{{cs}}
+                <input id="contextSwitch" type="radio" formControlName="contextSwitch" [value]="cs">{{cs}}
               </li>
             </div>
           </div>
@@ -409,10 +409,10 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <label >Duplicate</label>
+            <label for="dublicate">Duplicate</label>
             <div class="radio-inline" *ngFor="let d of dublicate">
               <li>
-                <input type="radio" formControlName="dublicate">{{d}}
+                <input id="dublicate" type="radio" formControlName="dublicate" [value]="d">{{d}}
               </li>
             </div>
           </div>
@@ -430,6 +430,7 @@
             class="btn btn-success"
             >Save</button>
           <button type="button" class="btn btn-primary" (click)="onUpdate()">Update</button>
+          <button type="button" class="btn btn-primary" (click)="onClear()">Clear</button>
           <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>
       </div>

@@ -1,0 +1,74 @@
+<div class="container" >
+  <table class="table table-hover table-bordered">
+    <thead class="thead-light">
+    <tr>
+      <th>Month Name</th>
+      <th>Jira Id</th>
+      <th>Customer Name</th>
+      <th>Jira Description</th>
+      <th>DeveloperName</th>
+      <th>Priority</th>
+      <th>Severity</th>
+      <th>Version</th>
+      <th>Eta To Fix</th>
+      <th>Defect Type</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Status</th>
+      <th>Step To Reproduce</th>
+      <th>Step To Reproduce Details If Any</th>
+      <th>Follow Up With GS2</th>
+      <th>Environment Setup</th>
+      <th>Analysis</th>
+      <th>Devlopement</th>
+      <th>Code Review</th>
+      <th>Provided Support To QA</th>
+      <th>Rework</th>
+      <th>Porting Required</th>
+      <th>Porting JiraId</th>
+      <th>Porting Effort</th>
+      <th>Reason</th>
+      <th>Total Effort</th>
+      <th>Complexity</th>
+      <th>Context Switch</th>
+      <th>Month Code</th>
+      <th>Dublicate</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let tracker of trackers">
+      <td>{{tracker._monthName}}</td>
+      <td>{{tracker._jiraId}}</td>
+      <td>{{tracker._customerName}}</td>
+      <td>{{tracker._jiraDescription}}</td>
+      <td>{{tracker._developerName}}</td>
+      <td>{{tracker._priority}}</td>
+      <td>{{tracker._severity}}</td>
+      <td>{{tracker._version}}</td>
+      <td>{{tracker._etaToFix}}</td>
+      <td>{{tracker._defectType}}</td>
+      <td>{{tracker._startDate}}</td>
+      <td>{{tracker._endDate}}</td>
+      <td>{{tracker._status}}</td>
+      <td>{{tracker._stepToReproduce}}</td>
+      <td>{{tracker._stepToReproduceDetailsIfAny}}</td>
+      <td>{{tracker._followUpWithGS2}}</td>
+      <td>{{tracker._environmentSetup}}</td>
+      <td>{{tracker._analysis}}</td>
+      <td>{{tracker._devlopement}}</td>
+      <td>{{tracker._codeReview}}</td>
+      <td>{{tracker._providedSupportToQA}}</td>
+      <td>{{tracker._rework}}</td>
+      <td>{{tracker._portingRequired}}</td>
+      <td>{{tracker._portingJiraId}}</td>
+      <td>{{tracker._portingEffort}}</td>
+      <td>{{tracker._reason}}</td>
+      <td>{{tracker._totalEffort}}</td>
+      <td>{{tracker._complexity}}</td>
+      <td>{{tracker._contextSwitch}}</td>
+      <td>{{tracker._monthCode}}</td>
+      <td>{{tracker._dublicate}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

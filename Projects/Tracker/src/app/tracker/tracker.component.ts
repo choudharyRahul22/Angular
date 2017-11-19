@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {TrackerModel} from "../Model/tracker.model";
+import {TrackerService} from "../shared/tracker.service";
+import {DataStorageService} from "../shared/data-storage.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-tracker',
@@ -8,9 +12,11 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class TrackerComponent implements OnInit {
 
-  monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  defaultMonthName = {monthId: 1 , monthName: 'Jan'};
+  monthName = [{monthId: 1 , monthName: 'Jan'}, {monthId: 2 , monthName: 'Feb'}, {monthId: 3 , monthName: 'Mar'}, {monthId: 4 , monthName: 'Apr'}, {monthId: 5 , monthName: 'May'}, {monthId: 6 , monthName: 'Jun'}, {monthId: 7 , monthName: 'Jul'}, {monthId: 8 , monthName: 'Aug'}, {monthId: 9 , monthName: 'Sep'}, {monthId: 10 , monthName: 'Oct'}, {monthId: 11 , monthName: 'Nov'}, {monthId: 12 , monthName: 'Dec'}];
   customerName = ['ABY', 'ASB', 'ATH', 'BCO', 'BNM', 'BOH', 'CAG', 'CAP', 'CAS', 'CTI', 'CUA', 'FBN', 'FTP', 'KBZ', 'NCZ', 'NCX', 'SER', 'SIB', 'TGE'];
-  developerName = ['Rahul Choudhary', 'Sheena Gaur', 'Laxmi Porwal', 'Shishir Mittal', 'Ravi Khare', 'Vinay Mehta', 'Deepak Kumar', 'Shivam Tiwari', 'Karanbir Waraich', 'Manu Narang', 'Priyanka Rawat', 'Sameer Dahariya'];
+  defaultDeveloperName = {empId: 103605 , name: 'Rahul Choudhary'};
+  developerName = [{empId: 103605 , name: 'Rahul Choudhary'}, {empId: 103606 , name: 'Sheena Gaur'}, {empId: 103607 , name: 'Laxmi Porwal'}, {empId: 103608 , name: 'Shishir Mittal'}, {empId: 103609 , name: 'Ravi Khare'}, {empId: 103610 , name: 'Vinay Mehta'}, {empId: 103611 , name: 'Deepak Kumar'}, {empId: 103612 , name: 'Shivam Tiwari'}, {empId: 103613 , name: 'Karanbir Waraich'}, {empId: 103614 , name: 'Manu Narang'}, {empId: 103615 , name: 'Priyanka Rawat'}, {empId: 103616 , name: 'Sameer Dhaiya'}];
   priority = ['P1', 'P2', 'P3'];
   severity = ['S1', 'S2', 'S3'];
   status = ['Not Started', 'In Analysis' , 'In Dev' , 'Ready For QA' , 'In QA', 'On Hold', 'Done'];
@@ -21,17 +27,73 @@ export class TrackerComponent implements OnInit {
   complexity = ['Small', 'Medium' , 'Large' , 'Enhancement'];
   contextSwitch = ['Yes' , 'No'];
   dublicate = ['Yes' , 'No'];
-
   trackerForm: FormGroup;
-  constructor() { }
+
+  constructor(private trackerService: TrackerService,
+              private dataStorageService: DataStorageService,
+              private router: Router,
+              private route: ActivatedRoute ) { }
 
   ngOnInit() {
     this.initForm();
   }
 
   onSubmit() {
-    console.log(this.trackerForm);
+
+    const newTracker = new TrackerModel(
+      this.trackerForm.value['monthName'],
+      this.trackerForm.value['jiraId'],
+      this.trackerForm.value['customerName'],
+      this.trackerForm.value['jiraDescription'],
+      this.trackerForm.value['developerName'],
+      this.trackerForm.value['priority'],
+      this.trackerForm.value['severity'],
+      this.trackerForm.value['version'],
+      this.trackerForm.value['etaToFix'],
+      this.trackerForm.value['defectType'],
+      this.trackerForm.value['startDate'],
+      this.trackerForm.value['endDate'],
+      this.trackerForm.value['status'],
+      this.trackerForm.value['stepToReproduce'],
+      this.trackerForm.value['stepToReproduceDetailsIfAny'],
+      this.trackerForm.value['followUpWithGS2'],
+      this.trackerForm.value['environmentSetup'],
+      this.trackerForm.value['analysis'],
+      this.trackerForm.value['devlopement'],
+      this.trackerForm.value['codeReview'],
+      this.trackerForm.value['providedSupportToQA'],
+      this.trackerForm.value['rework'],
+      this.trackerForm.value['portingRequired'],
+      this.trackerForm.value['portingJiraId'],
+      this.trackerForm.value['portingEffort'],
+      this.trackerForm.value['reason'],
+      this.trackerForm.value['totalEffort'],
+      this.trackerForm.value['complexity'],
+      this.trackerForm.value['contextSwitch'],
+      this.trackerForm.value['monthCode'],
+      this.trackerForm.value['dublicate'],
+    );
+
+    console.log(newTracker);
+    this.trackerService.saveTracker(newTracker);
+
+    this.dataStorageService.storeTracker().subscribe(
+        (data: any) => {
+          console.log(data);
+        }
+      );
+
+   // this.onClear();
   }
+
+  onCancel() {
+    this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  onClear() {
+    this.trackerForm.reset();
+  }
+
 
   private initForm() {
     let monthName = '';
@@ -101,6 +163,5 @@ export class TrackerComponent implements OnInit {
       'dublicate': new FormControl(dublicate, Validators.required),
     });
   }
-
 
 }

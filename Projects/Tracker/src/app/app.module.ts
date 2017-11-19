@@ -10,6 +10,10 @@ import {HttpModule} from "@angular/http";
 import { HeaderComponent } from './header/header.component';
 import { TrackerComponent } from './tracker/tracker.component';
 import {AuthService} from "./auth/auth.service";
+import {TrackerService} from "./shared/tracker.service";
+import {DataStorageService} from "./shared/data-storage.service";
+import { TrackComponent } from './track/track.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,9 @@ import {AuthService} from "./auth/auth.service";
     SigninComponent,
     SignupComponent,
     HeaderComponent,
-    TrackerComponent
+    TrackerComponent,
+    TrackComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,7 +32,7 @@ import {AuthService} from "./auth/auth.service";
     HttpModule,
     AppRoutingModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, TrackerService, DataStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
