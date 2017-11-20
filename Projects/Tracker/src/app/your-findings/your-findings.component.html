@@ -1,7 +1,58 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form (ngSubmit)="onSubmit()" #f="ngForm">
+
+
+          <div class="form-group">
+            <label for="jiraId">Jira ID</label>
+            <input type="text" id="jiraId" class="form-control" ngModel name="jiraId" required >
+          </div>
+
+          <!-- Customer -->
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label for="customerName">Customer Name</label>
+                <select class="form-control" id="customerName" ngModel name="customerName">
+                  <option *ngFor="let cn of customerName">{{cn}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        <div class="form-group">
+          <textarea name="note" rows="3" class="form-control" [(ngModel)]="note">{{note}}</textarea>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Submit</button>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="submitted">
+    <div class="col-xs-12" *ngFor="let findings of yourFindings">
+      <hr>
+      <h3>{{date | date: 'medium'}}</h3>
+      <p>Jira ID : {{findings.jiraId}}</p>
+      <p>Customer : {{findings.customerName}}</p>
+      <p>Note : {{findings.note}}</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!--
+<hr>
+
 <div >
   <div class="row" >
     <div class="col-md-12">
-      
+
       <h3>Customer : FTP</h3>
       <p>Partion enabling code was already there but we find a bug and fix it.</p>
 
@@ -29,3 +80,4 @@
     </div>
   </div>
 </div>
+-->
