@@ -22,20 +22,15 @@ import { SignComponent } from './auth/sign/sign.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import {AuthService} from "./auth/auth.service";
 import {AuthGaurdService} from "./auth/auth-gaurd.service";
+import {RecipesModule} from "./recipes/recipes.module";
+import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    RecipesComponent,
-    RecipeListComponent,
-    RecipeDetailComponent,
-    RecipeItemComponent,
     ShoppingListComponent,
     ShoppingEditComponent,
-    DropdownDirective,
-    RecipeStartComponent,
-    RecipeEditComponent,
     SignComponent,
     SignupComponent
   ],
@@ -44,7 +39,9 @@ import {AuthGaurdService} from "./auth/auth-gaurd.service";
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RecipesModule,
+    SharedModule
   ],
   providers: [ShoppingListService, RecipeService, DataStorageService, AuthService, AuthGaurdService],
   bootstrap: [AppComponent]
