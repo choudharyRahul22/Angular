@@ -1,0 +1,38 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>MyMaterial</span>
+
+    <span class="example-spacer"></span>
+
+    <button mat-button>About</button>
+    <button mat-button>Services</button>
+    <button mat-button>Contact</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<hr>
+<mat-card>
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Favorite food" value="Sushi">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <textarea matInput placeholder="Leave a comment"></textarea>
+  </mat-form-field>
+</form>
+</mat-card>
+
+<hr>
+
+<mat-card>
+  <mat-form-field>
+    <input matInput [(ngModel)]="answer" placeholder="Your favourite teacher ?">
+  </mat-form-field>
+    <br>
+    <button mat-raised-button (click)="showAnswer()" class="mat-primary">Answer Me</button>
+    <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+</mat-card>
+
+<mat-card *ngIf="answerDisplay">
+  <h1>{{answerDisplay}}</h1>
+</mat-card>

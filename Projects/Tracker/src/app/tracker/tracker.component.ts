@@ -38,6 +38,8 @@ export class TrackerComponent implements OnInit {
     this.initForm();
   }
 
+  onUpdate() {}
+
   onSubmit() {
 
     const newTracker = new TrackerModel(

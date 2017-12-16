@@ -104,9 +104,68 @@ Superset of javascript, strongly typed (type are defined and checked at compile 
 
 typescript compile to javascript which is done by CLI and finally javascript runs in browser.
 
+Add Angular Material:
+---------------------
+npm uninstall -g angular-cli
+npm cache clean
+npm install -g @angular/cli@latest
+npm install -g @angular/compiler-cli@latest
+
+1. npm install --save @angular/material @angular/cdk
+2. npm install --save @angular/animations
+3. Let's integrate the freshly installed animations library to our /src/app/app.module.ts file:
+// Other imports removed for brevity
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+@NgModule({
+  ...
+  imports: [
+    ...,
+    BrowserAnimationsModule
+  ],
+  ...
+})
+export class AppModule { }
+4. Create a new file /src/app/material.module.ts and paste the following contents:
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material';
+
+@NgModule({
+  imports: [MatButtonModule],
+  exports: [MatButtonModule],
+})
+export class MaterialModule { }
+5. Next, back in app.module.ts we import it by adding:
+// Other imports removed for brevity
+import { MaterialModule } from './material.module';
+
+@NgModule({
+  ...
+  imports: [
+    ...,
+    BrowserAnimationsModule,
+    MaterialModule
+  ],
+  ...
+})
+export class AppModule { }
+6. To integrate one, visit the /src/styles.css file and paste the following line at the top:
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+7. npm install --save hammerjs
+8. To include this, we add it to the /src/main.ts entry point as an import:
+// Other imports removed for brevity
+import 'hammerjs';
+9. Finally, if you're going to use any Material Design Icons (they are used quite frequently throughout material), we need to import Material Icons in the /src/index.html file between the head tags: 
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+10. That was a lot of setup! Let's make sure it works by checking out the Angular Material Button component.
+Visit the /src/app/app.component.html and remove all of the HTML and replace it with:
+<button mat-button>My Button</button>
+
 Add Bootstrap to Angular:
 -------------------------
 1. Add link in index.html file.
+	OR
 2. Install using npm
    a. Go to dir where you project is
    b. run "npm install --save bootstrap"
@@ -152,7 +211,7 @@ Components:
 -----------
 Note: Project we import for component directive .....need to stop and start again to see the changes.
 
-Components are directives with a template and buisness logic which can be used anywhere and any number of times.
+Components subset of directives with a template and buisness logic which can be used anywhere and any number of times.
 
 Note: in angular-1 we have directives 
 // Custom Directive : searchResult will be normalize in html as <search-result>
@@ -458,7 +517,7 @@ Directives:
 -----------
 Directives are instruction in the DOM.
 
-Component are like directive which has selector and buisness logic, we place selector in html and says this is our component which binds with buisness logic.
+Component are subset of directive which has selector and buisness logic, we place selector in html and says this is our component which binds with buisness logic.
 
 Component are directive with a Template.
 
@@ -763,7 +822,7 @@ To undersatnd application structure install augury extension in chrome.
 
 Components and Databinding:
 ----------------------------
-Here we use samll project where we have:
+Here we use small project where we have:
 cockpit component in which user will add new server (servername and servercontent).
 app component to which we will pass above information (servername and servercontent).
 server-element component which will recive info (servername and servercontent) from app component.
@@ -2512,6 +2571,9 @@ signinUser(email: string, password: string) {
 
 Module and Optimize Application:
 --------------------------------
+Common Module: The module that includes all the basic Angular directives like NgIf, NgForOf, ...
+
+
 
 Tracker:
 --------
