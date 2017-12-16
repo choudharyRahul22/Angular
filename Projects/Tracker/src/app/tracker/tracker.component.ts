@@ -95,6 +95,8 @@ export class TrackerComponent implements OnInit {
   onClear() {
     this.trackerForm.reset();
   }
+  
+  onUpdate() {}
 
 
   private initForm() {
