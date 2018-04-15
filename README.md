@@ -164,7 +164,7 @@ Visit the /src/app/app.component.html and remove all of the HTML and replace it 
 
 Add Bootstrap to Angular:
 -------------------------
-1. Add link in index.html file.
+1. Add link in index.html file. : https://loiane.com/2017/08/how-to-add-bootstrap-to-an-angular-cli-project/
 	OR
 2. Install using npm
    a. Go to dir where you project is
