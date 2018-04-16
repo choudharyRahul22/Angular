@@ -168,7 +168,7 @@ Add Bootstrap to Angular:
 	OR
 2. Install using npm
    a. Go to dir where you project is
-   b. run "npm install --save bootstrap"
+   b. run "npm install --save bootstrap" OR npm install --save bootstrap@3
    c. Go to angular-cli.json , styles which refer to style.css which is global style , now add below 
    "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
