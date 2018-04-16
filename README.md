@@ -173,6 +173,12 @@ Add Bootstrap to Angular:
         "../node_modules/bootstrap/dist/css/bootstrap.css",
         "styles.css"
       ],
+    For Modals : we have "scripts" under cli.json , just give bootstrap.js and than install npm install jquery@3.3.1 and add jqery.js.
+    like : Note order should be same first jquery than bootstrap : may be some dependency issue is there.
+    "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js"
+      ],
    d. Stop ng-serve (ctrl + c) and restart it.
    e. To check weather bootstrap is added to our project we will see the html in developer tool under Elements , in head it will now have link to bootstrap
 
