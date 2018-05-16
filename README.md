@@ -184,15 +184,20 @@ Visit the /src/app/app.component.html and remove all of the HTML and replace it 
 
 Add Bootstrap to Angular:
 -------------------------
-1. Add link in index.html file.
-	OR
+1. Add link in index.html file. : https://loiane.com/2017/08/how-to-add-bootstrap-to-an-angular-cli-project/.	
 2. Install using npm
    a. Go to dir where you project is
-   b. run "npm install --save bootstrap"
+   b. run "npm install --save bootstrap" OR npm install --save bootstrap@3
    c. Go to angular-cli.json , styles which refer to style.css which is global style , now add below 
    "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
         "styles.css"
+      ],
+    For Modals : we have "scripts" under cli.json , just give bootstrap.js and than install npm install jquery@3.3.1 and add jqery.js.
+    like : Note order should be same first jquery than bootstrap : may be some dependency issue is there.
+    "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js"
       ],
    d. Stop ng-serve (ctrl + c) and restart it.
    e. To check weather bootstrap is added to our project we will see the html in developer tool under Elements , in head it will now have link to bootstrap
