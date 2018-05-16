@@ -1,3 +1,23 @@
+Browser close event:
+--------------------
+@HostListener('window:beforeunload', ['$event'])
+    public beforeunloadHandler($event) {
+        $event.returnValue = "Are you sure?";
+    }
+
+Testing:
+--------
+fdescribe : update describe to fdescribe
+
+debugger; : put debugger on line where you want the break point.
+ 
+refersh browser
+
+install below dependency for code coverage:
+npm install karma karma-jasmine karma-chrome-launcher karma-jasmine-html-reporter karma-coverage-istanbul-reporter
+
+ng test --code-coverage
+
 Error That You Might Get:
 -------------------------
 Depending on the CLI version you're using, you might also need to add the FormsModule  to the imports[]  array in your app.module.ts  file (add it if you don't see it there). You might not fully understand what that all means but we're going to cover that in this course, no worries.

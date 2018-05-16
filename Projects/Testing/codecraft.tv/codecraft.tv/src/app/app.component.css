@@ -1,0 +1,43 @@
+.content {
+  max-width: 1000px;
+  margin: auto;
+  background: white;
+  padding: 10px;
+}
+
+/*
+.form-horizontal .control-label {
+  text-align: left !important;
+  padding-left: 28px;
+}
+ */
+
+
+
+.border {
+  margin-top:0px;
+  margin-bottom:20px;
+  background-color: transparent;
+  border-top: 5px solid #337ab7 !important;
+}
+
+.footerborder {
+  margin-top:0px;
+  margin-bottom:20px;
+  background-color: transparent;
+  border-top: 5px solid  #e4e4e4 !important;
+}
+
+
+.workAreaHeader{
+  margin-top: 30px !important;
+  margin-bottom: 0px;
+}
+
+.required:after {
+  content:" *";
+  color: red;
+  position: absolute;
+  padding: 0 5px 0 0;
+  font-size: 18px;
+}

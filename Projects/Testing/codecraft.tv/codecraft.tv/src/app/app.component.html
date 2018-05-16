@@ -1,0 +1,90 @@
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="form-group col-sm-offset-3 col-sm-9 workAreaHeader">
+        <h4>
+          <label  for="message">Select Work Area</label>
+        </h4>
+      </div>
+      <div class="col-sm-12">
+        <hr class="col-sm-offset-3 col-sm-4 col-sm-offset-5 border">
+      </div>
+      <form class="form-horizontal" novalidate [formGroup]="workAreaSelectionForm" (ngSubmit)="openSearch()">
+        <div class="form-group">
+          <div class="col-sm-1"></div>
+          <label class="col-sm-3 col-form-label control-label" for="queue">Queue
+            <span class="required"></span>
+          </label>
+          <div class="col-sm-3">
+            <select id="ORqueue" class="form-control" formControlName="queueName">
+              <option selected hidden>OC</option>
+              <option *ngFor="let queue of queues" [ngValue]="queue.lookupcode">{{queue.lookupcode}}</option>
+            </select>
+          </div>
+          <div class="col-sm-5"></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-1"></div>
+          <label class="col-sm-3 col-form-label control-label" for="business">Business</label>
+          <div class="col-sm-3">
+            <select id="ORbusiness" class="form-control" formControlName="businessName">
+              <option selected hidden value="">Select Business</option>
+              <option *ngFor="let business of businesses" [ngValue]="business.lookupcode">{{business.lookupcode}}</option>
+            </select>
+          </div>
+          <div class="col-sm-5"></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-1"></div>
+          <label class="col-sm-3 col-form-label control-label" for="cell">Cell</label>
+          <div class="col-sm-3">
+            <select id="ORcell" class="form-control" formControlName="cellName">
+              <option selected hidden value="">Select Cell</option>
+              <option *ngFor="let cell of cells" [ngValue]="cell.lookupcode">{{cell.lookupcode}}</option>
+            </select>
+          </div>
+          <div class="col-sm-5"></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-1"></div>
+          <label class="col-sm-3 col-form-label control-label" for="source">Source</label>
+          <div class="col-sm-3">
+            <select id="ORsource" class="form-control" formControlName="sourceName">
+              <option selected hidden value="">Select Source</option>
+              <option *ngFor="let source of sources" [ngValue]="source.lookupcode">{{source.lookupcode}}</option>
+            </select>
+          </div>
+          <div class="col-sm-5"></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-8">
+            <div class="checkbox">
+              <label>
+                <input id="savePreset" type="checkbox" formControlName="savePresetFlag">Save as Preset
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <hr class="col-sm-offset-3 col-sm-4 col-sm-offset-5 footerborder">
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-12">
+            <div class="col-sm-offset-5 col-sm-1">
+              <button type="button" (click)="resetForm()" class="btn btn-default">Reset</button>
+            </div>
+            <div class="col-sm-1">
+              <button type="submit" [disabled]="workAreaSelectionForm.invalid" class="btn btn-primary">Search</button>
+            </div>
+            <div class="col-sm-offset-3"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
